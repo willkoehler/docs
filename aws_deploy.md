@@ -1,4 +1,4 @@
-##Overview
+#Overview
 This documents contains instructions for using Rubber to prepare an app with a basic framework
 for deployment on AWS.
 
