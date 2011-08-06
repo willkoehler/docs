@@ -125,6 +125,46 @@ deploy, overriding the version checked into git. If we didn't use this, we would
 
     set :push_instance_config, true
     
+##Backups via EBS snapshots (optional)
+EBS snapshots provide an excellent backup mechanism for applications running on AWS.
+The task below is hardcoded to work with a single-server deployment with a single EBS
+volume and MySQL database. To use EBS snapshots, add the system:backup task to your
+rake file
+
+    require "AWS"
+
+    namespace :system do
+      desc "Server backup. Database and all user data will be backed up"
+      task :backup => :environment do
+        # Flush and lock all the DB tables. Rails will block on actions that write to the DB
+        # until the tables are unlocked. This should be transparent to web users, asside from
+        # a short delay in the app response time. Entire :backup task only takes a few seconds.
+        ActiveRecord::Base.establish_connection
+        ActiveRecord::Base.connection.execute("FLUSH TABLES WITH READ LOCK")
+        # Fush Ext3 file system cache to disk
+        system("sync")
+        # Create EBS snapshot. We only have one instance and one EBS volume, just select that volume
+        ec2 = AWS::EC2::Base.new(:access_key_id => cloud_provider.access_key, :secret_access_key => cloud_provider.secret_access_key)
+        volume_id = rubber_instances.first.volumes.first
+        ec2.create_snapshot(volume_id: volume_id, description: "Nightly backup of /ebs on #{rubber_instances.first.full_name}")
+        # unlock tables
+        ActiveRecord::Base.connection.execute("UNLOCK TABLES")
+      end
+    end
+    
+Add a cron job to `config/rubber/common/crontab` to run system:backup nightly
+
+    # Backup server at 1:30am
+    30 1 * * * <%= RUBBER_ROOT %>/script/cron-rake system:backup
+
+Disable the Rubber-provided backup cron job defined in `config/rubber/role/db/crontab`
+
+    #(disabled) 0 */3 * * * BACKUP_DIR=/ebs/db_backups DBUSER=<%= rubber_env.db_user %> ...
+
+
+NOTE: EBS snapshot backups are required for the last two recovery methods described below.
+
+
 ##Create the server and deploy the application.
 
     bundle exec cap rubber:create        # creates the instance on AWS
