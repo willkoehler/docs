@@ -1,6 +1,6 @@
 #Overview
 This documents contains instructions for using Rubber to prepare an app with a basic framework
-for deployment on AWS.
+for a single server deployment on AWS.
 
 ##Prepare the app
 Add the following lines to config/boot.rb.
