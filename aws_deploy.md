@@ -136,6 +136,7 @@ rake file
     namespace :system do
       desc "Server backup. Database and all user data will be backed up"
       task :backup => :environment do
+        start = Time.now
         # Flush and lock all the DB tables. Rails will block on actions that write to the DB
         # until the tables are unlocked. This should be transparent to web users, asside from
         # a short delay in the app response time. Entire :backup task only takes a few seconds.
@@ -146,9 +147,11 @@ rake file
         # Create EBS snapshot. We only have one instance and one EBS volume, just select that volume
         ec2 = AWS::EC2::Base.new(:access_key_id => cloud_provider.access_key, :secret_access_key => cloud_provider.secret_access_key)
         volume_id = rubber_instances.first.volumes.first
-        ec2.create_snapshot(volume_id: volume_id, description: "Nightly backup of /ebs on #{rubber_instances.first.full_name}")
+        puts "Creating snapshot of #{volume_id}."
+        ec2.create_snapshot(volume_id: volume_id, description: "Nightly backup of #{rubber_instances.first.full_name}")
         # unlock tables
         ActiveRecord::Base.connection.execute("UNLOCK TABLES")
+        puts "System backup completed in %.1f seconds." % [Time.now - start]
       end
     end
     
