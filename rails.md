@@ -146,3 +146,55 @@ Display environment that RubyGems is running in
 
     gem environment
 
+#Use RSpec for testing
+Use RSpec instead of Test::Unit in a Rails app. (Make sure to add rspec-rails gem to your Gemfile.)
+
+    rails new app_name -T           # create Rails app without Test::Unit
+    cd sample_app
+    rails generate rspec:install    # generate RSpec files
+
+Remove test for views and helpers.
+
+    rm -rf spec/views
+    rm -rf spec/helpers
+    
+Run tests: all tests, specify subdirectory, specify a spec file, specify specific specs
+
+    bundle exec rspec spec/
+    bundle exec rspec spec/controllers/
+    bundle exec rspec spec/controllers/your_spec.rb
+    bundle exec rspec spec/controllers/your_spec.rb -e "partial text from spec description"
+
+Install Spork to speed up tests. Follow instructions in the "Spork" section: <http://ruby.railstutorial.org/chapters/static-pages#sec:TDD>
+
+Install Guard to run tests automatically. <http://railscasts.com/episodes/264-guard>
+
+#Generate Stuff
+Generate a controller
+
+    rails generate controller Users new
+    rails generate controller Pages home contact about
+    rails generate controller Sessions new
+    
+Generate a controller without specs. NOTE: Ryan Bates doesn't use controller specs
+because the requests specs (i.e. integration tests) test the controller and view
+logic well enough. If logic is too complex for the request spec then it should
+probably go in the model.
+
+    rails generate controller Sessions new --no-test-framework
+
+Generate a model
+
+    rails generate model User field1:string field2:string
+    rails generate model Micropost content:string user_id:integer
+
+Create a migration
+
+    rails generate migration add_email_uniqueness_index
+    rails generate migration add_password_to_users encrypted_password:string
+    rails generate migration add_salt_to_users salt:string
+    rails generate migration add_admin_to_users admin:boolean
+
+Generate an integration test (i.e. request spec). Integration test will be created as spec/requests/some_name_spec.
+
+    rails generate integration_test some_name
