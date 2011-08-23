@@ -165,9 +165,39 @@ Run tests: all tests, specify subdirectory, specify a spec file, specify specifi
     bundle exec rspec spec/controllers/your_spec.rb
     bundle exec rspec spec/controllers/your_spec.rb -e "partial text from spec description"
 
-Install Spork to speed up tests. Follow instructions in the "Spork" section: <http://ruby.railstutorial.org/chapters/static-pages#sec:TDD>
+###Use Spork to speed up tests.
+Follow instructions in the "Spork" section: <http://ruby.railstutorial.org/chapters/static-pages#sec:TDD>
 
-Install Guard to run tests automatically. <http://railscasts.com/episodes/264-guard>
+Run Spork in its own terminal tab. Use `"bundle exec"` when running Spork so that it loads
+the correct Rails environment.
+
+    bundle exec spork
+    
+Spork pre-loads the Rails environment for RSpec. You can then use the --drb flag when running RSpec
+to connect to the preloaded environment instead of loading the Rails environment each time. Alternatively
+you can edit the .rspec file in your project root and add a --drb line so that RSpec uses the
+pre-loaded Rails environment by default
+
+###Use Guard to run tests automatically.
+<http://railscasts.com/episodes/264-guard>
+
+Run Guard in its own terminal tab.
+
+    bundle exec guard
+
+Because we've setup Spork to preload the Rails environment, RSpec will simply be connecting to a
+pre-loaded Rails environment. As long as the system version of RSpec matches the version of
+RSpec in our Gemfile, we don't need to use `"bundle exec"` when running RSpec. We can edit
+our Guardfile and add `:bundler => false` to the list of options. This saves a few seconds each
+time Guard runs our test suite.
+
+    guard 'rspec', :version => 2, :bundler => false do
+      watch(%r{^spec/.+_spec\.rb})
+      watch(%r{^lib/(.+)\.rb})     { |m| "spec/lib/#{m[1]}_spec.rb" }
+      .
+      .
+      .
+
 
 #Generate Stuff
 Generate a controller
@@ -198,3 +228,22 @@ Create a migration
 Generate an integration test (i.e. request spec). Integration test will be created as spec/requests/some_name_spec.
 
     rails generate integration_test some_name
+
+
+#Misc
+
+Rollback the last db migration / last 3 migrations
+
+    bundle exec rake db:rollback            # just the last migration
+    bundle exec rake db:rollback STEP=3     # last three migrations
+
+Rollback and redo the last db migration (typically after you've corrected a problem with
+the migration
+
+    bundle exec rake db:migrate:redo            # redo the last migration
+    bundle exec rake db:migrate:redo STEP=3     # rollback and re-apply the last three migrations
+
+Prepare the test database after adding new migrations.
+
+    bundle exec rake db:test:prepare
+
