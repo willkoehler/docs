@@ -125,6 +125,10 @@ See "Grouping Your Dependencies" [http://gembundler.com/rationale.html](http://g
 To view the current configuration use the command.
 
     bundle config
+    
+Open the contents of a gem in the text editor specified in your shell ($EDITOR or $BUNDLE_EDITOR)
+
+    bundle open gem-name
 
 #RubyGems
 
