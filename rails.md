@@ -165,28 +165,15 @@ Run tests: all tests, specify subdirectory, specify a spec file, specify specifi
     bundle exec rspec spec/controllers/your_spec.rb
     bundle exec rspec spec/controllers/your_spec.rb -e "partial text from spec description"
 
-###Use Spork to speed up tests.
-Follow instructions in the "Spork" section: <http://ruby.railstutorial.org/chapters/static-pages#sec:TDD>
-
-Run Spork in its own terminal tab. Use `"bundle exec"` when running Spork so that it loads
-the correct Rails environment.
-
-    bundle exec spork
-    
-Spork pre-loads the Rails environment for RSpec. You can then use the --drb flag when running RSpec
-to connect to the preloaded environment instead of loading the Rails environment each time. Alternatively
-you can edit the .rspec file in your project root and add a --drb line so that RSpec uses the
-pre-loaded Rails environment by default
-
-###Use Guard to run tests automatically.
+###Use Guard to run tests automatically
 <http://railscasts.com/episodes/264-guard>
 
 Run Guard in its own terminal tab.
 
     bundle exec guard
 
-Because we've setup Spork to preload the Rails environment, RSpec will simply be connecting to a
-pre-loaded Rails environment. As long as the system version of RSpec matches the version of
+If we use Spork to preload the Rails environment (see below), RSpec will simply be connecting
+to a pre-loaded Rails environment. As long as the system version of RSpec matches the version of
 RSpec in our Gemfile, we don't need to use `"bundle exec"` when running RSpec. We can edit
 our Guardfile and add `:bundler => false` to the list of options. This saves a few seconds each
 time Guard runs our test suite.
@@ -198,6 +185,11 @@ time Guard runs our test suite.
       .
       .
 
+###Use Spork to speed up tests
+<http://railscasts.com/episodes/285>
+
+"Spork improves the loading time of your test suite by starting up your Rails application once
+in the background. Use it with Guard for the ultimate combo in fast feedback while doing TDD"
 
 #Generate Stuff
 Generate a controller
