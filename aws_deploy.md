@@ -3,19 +3,14 @@ This documents contains instructions for using Rubber to prepare an app with a b
 for a single server deployment on AWS.
 
 ##Prepare the app
-Add the following lines to config/boot.rb.
-
-    require 'yaml'
-    YAML::ENGINE.yamler= 'syck'
-    
 If you don't have a "secrets" folder already in your app, create a folder to hold secret files
-that you don't want checked into version control.
+that you don't want checked into source control.
 
     mkdir -p config/secrets
     
 Add the following lines to your Gemfile and update your gems with "`bundle install`"
 
-    gem 'rubber', :git => "git://github.com/willkoehler/rubber.git"
+    gem 'rubber', '1.15.0'
 
 ##Vulcanize the app to setup the necessary files for Rubber.
 We vulcanize each role manually, rather than use an all-in-one generator like "`complete_passenger_mysql`"
@@ -118,18 +113,61 @@ at this time, we need to tell passenger to listen on ports 80,443
     passenger_listen_port: 80
     passenger_listen_ssl_port: 443
     
-##Edit deploy.rb and enable push\_instance\_config
+##Edit deploy.rb to customize the deploy process
+###Enable push\_instance\_config
 When `push_instance_config` is enabled, Rubber pushes `instance-production.yml` directly to the server during
 deploy, overriding the version checked into git. If we didn't use this, we would need to check in changes to
 `instance-production.yml` and push them to github after each deploy step.
 
     set :push_instance_config, true
+
+###Add a task to push the contents of config/secrets to the server
+`config/secrets` contains files with sensitive information that should not be checked into source control.
+We need to push these files to the server manually during deploy.
+
+    namespace :deploy do
+      # Push contents of config/secrets folder to the server
+      after "deploy:update_code", "deploy:app_secrets"
+      desc "Push contents of config/secrets folder to the remote server"
+      task :app_secrets do
+        rubber_instances.for_role('app').each do |instance|
+          system "rsync -rz -e 'ssh -i #{rubber_env.cloud_providers.aws.key_file}' config/secrets root@#{instance.full_name}:#{release_path}/config"
+        end
+      end
+    end
+    
+###Add a task to precompile assets
+This task compiles assets on the dev system and then pushes them up to the server. This avoids
+several problems caused by compiling assets on the server, including blowing the CPU burst window
+on t1.micro instances and tricky timing issues related to when the assets need to be compiled in
+the deploy cycle (after rubber:update, but before server restart).
+
+    namespace :deploy do
+      desc "precompile and deploy the assets to the server"
+      after "deploy:update_code", "deploy:precompile_assets"
+      task :precompile_assets, :roles => :app do
+        run_locally "#{rake} RAILS_ENV=#{rails_env} RAILS_GROUPS=assets assets:precompile"
+        transfer(:up, "public/assets", "#{release_path}/public/assets") { print "." }
+        run_locally "rm -rf public/assets"    # clean up to avoid conflicts with development-mode assets
+      end
+    end
+
+###Use github for deploy
+The trick here is to use `ssh_options[:forward_agent] = true` so that the server can use our
+local github key to pull the deploy. Also use remote_cache to speed up deploys.
+
+    # Based on http://github.com/guides/deploying-with-capistrano
+    default_run_options[:pty] = true
+    set :scm, :git
+    set :repository, "git@github.com:username/repo.git"
+    set :branch, "the_branch"
+    ssh_options[:forward_agent] = true  # Magic! lets the server use our local github key to pull the deploy
+    set :deploy_via, :remote_cache
     
 ##Backups via EBS snapshots (optional)
 EBS snapshots provide an excellent backup mechanism for applications running on AWS.
 The task below is hardcoded to work with a single-server deployment with a single EBS
-volume and MySQL database. To use EBS snapshots, add the system:backup task to your
-rake file
+volume and MySQL database. To use EBS snapshots, create a rake file lib/tasks/system.rake
 
     require "AWS"
 
@@ -192,7 +230,30 @@ Error missed during bootstrap and deploy can lead to strange problems that are v
 
 ##Connect to the new instance via SSH
 
-    ssh -i config/secret/your-keypair-name root@your.server.url
+    ssh -i config/secrets/your-keypair-name root@your.server.url
+
+##Cleanup Munin Charts
+If left in the default configuration, Munin charts take about 20s to render every 5 minutes, maxing out the CPU. 
+To reduce the number of charts Munin generates, SSH into the instance and run these commands. The charts
+selected below seem to provide a good balance with minimal load.
+
+    cd /etc/munin/plugins
+    rm *
+    ln -s /usr/share/munin/plugins/cpu cpu
+    ln -s /usr/share/munin/plugins/diskstats diskstats
+    ln -s /usr/share/munin/plugins/http_loadtime http_loadtime
+    ln -s /usr/share/munin/plugins/load load
+    ln -s /usr/share/munin/plugins/memory memory
+    ln -s /usr/share/munin/plugins/munin_stats munin_stats
+    ln -s /usr/share/munin/plugins/swap swap
+
+You will also need to remove several files from you app. Otherwise several charts will be recreated on
+the next deploy.
+
+    rm script/munin/example_mysql_query.rb
+    rm sctipt/munin/example_simple.rb
+    rm config/rubber/role/passenger_nginx/munin-passenger-memory.conf
+    rm config/rubber/role/passenger_nginx/munin-passenger.conf
 
 ##Recovering if an instance crashes
 If an instance crashes, Rubber allows you to create a new instance and remount your EBS volumes on the new
