@@ -15,7 +15,7 @@ defaults to using `--disable-shared-gems` which means that the Rails app and com
 of these gems). They will not see gems installed in the system.
 
 Bundler is integrated into Rails 3. No extra work is required. The Rails app sees the environment
-Bundler provides, and thus only sees gems specified in the gemfile.
+Bundler provides, and thus only sees gems specified in the Gemfile.
 
 IMPORTANT: Any executable you want to run within the scope of the app (`rake`, `cap`, etc) must be run with
 `"bundle exec"`
@@ -23,6 +23,22 @@ IMPORTANT: Any executable you want to run within the scope of the app (`rake`, `
     bundle exec some-command
   
 This means you will use `"bundle exec"` all the time when working within your rails app.
+
+###Bundler in stand-alone Ruby apps
+To use Bundler in a Ruby app, add a require statement to your main application file.
+
+    require "bundler"
+
+This allows Bundler to control the load path and give the application access to the gems/versions
+called out in the Gemfile.
+
+When you run your app with `bundle exec`, Bundler automatically includes itself in the
+application. In this case, the `require "bundler"` line is redundant.
+
+To have Bundler automatically include all the gems in the Gemfile, add a Bundler.require
+statement to your main application file.
+
+    Bundler.require(:default)
 
 ###Bundler doesn't always install gems in the standard system location
 When you install gems with `"bundle install"`, Bundler figures out the best place to put the
@@ -131,7 +147,6 @@ Open the contents of a gem in the text editor specified in your shell ($EDITOR o
     bundle open gem-name
 
 #RubyGems
-
 ###Helpful Commands
 See which specific gem is being used and where it's located.
 
@@ -149,6 +164,11 @@ line, cleanup will be run agains all installed gems.
 Display environment that RubyGems is running in
 
     gem environment
+
+### Requiring 'rubygems' no longer necessary
+Ruby 1.9 includes RubyGems by default so you do not need a `require 'rubygems'` statement in
+order to load gem libraries. Just use `require 'gemname'` statements as needed.
+
 
 #Use RSpec for testing
 Use RSpec instead of Test::Unit in a Rails app. (Make sure to add rspec-rails gem to your Gemfile.)
