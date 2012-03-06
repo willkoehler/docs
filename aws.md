@@ -62,14 +62,14 @@ For the web applications I'm developing there are three instance types that make
 * API name: c1.medium
 
 ###Month-to-month pricing:
-* **t1.micro:** $14.88/month
-* **m1.small:** $63.24/month
-* **c1.medium:** $126.40/month
+* **t1.micro:** $14.60/month
+* **m1.small:** $58.40/month
+* **c1.medium:** $120.45/month
 
-###Pricing with a 3 year commitment 
-* **t1.micro:** $7.39/month
-* **m1.small:** $31.62/month
-* **c1.medium:** $63.24/month
+###Pricing with a 3 year commitment (heavy utilization)
+* **t1.micro:** $6.42/month
+* **m1.small:** $17.82/month
+* **c1.medium:** $47.07/month
 
 ##AWS Micro (t1.micro) instances
 On t1.micro instance CPU instances are allocated in bursts. When not bursting, the steady-state CPU
