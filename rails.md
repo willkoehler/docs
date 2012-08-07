@@ -215,6 +215,24 @@ time Guard runs our test suite.
 "Spork improves the loading time of your test suite by starting up your Rails application once
 in the background. Use it with Guard for the ultimate combo in fast feedback while doing TDD"
 
+#Create New Rails App with MySQL and RSpec
+
+    rails new app_name -T -d mysql   # create Rails app without Test::Unit
+    
+Edit Gemfile and add a line for rspec-rails.
+
+    group :development, :test do
+      gem 'rspec-rails'
+      ...
+    end
+
+Run Bundler, setup the database and generate the RSpec files
+
+    cd app_name
+    bundle
+    rake db:migrate             # setup the initial database
+    rails g rspec:install       # generate RSpec files
+
 #Generate Stuff
 Generate a controller
 
@@ -247,10 +265,18 @@ Generate an integration test (i.e. request spec). Integration test will be creat
 
 
 #Misc
-
 Show list of current routes
 
     bundle exec rake routes
+
+Database commands
+
+    rake db:migrate             # Runs migrations that have not run yet.
+    rake db:create              # Creates the database
+    rake db:drop                # Deletes the database
+    rake db:schema:load         # Creates tables and columns within the database following schema.rb
+    rake db:setup               # Does db:create, db:schema:load, db:seed
+    rake db:reset               # Does db:drop, db:setup  
 
 Rollback the last db migration / last 3 migrations
 
