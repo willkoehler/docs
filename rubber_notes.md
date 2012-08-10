@@ -1,5 +1,5 @@
 #Rubber
-Various notes on using the Rubber gem
+Various notes on using the Rubber gem (v1.15)
 
 ##Haproxy
 By default Rubber sets up HTTP ports for haproxy, even if haproxy is not present. In particular

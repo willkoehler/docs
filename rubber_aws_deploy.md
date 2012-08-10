@@ -1,5 +1,5 @@
 #Using Rubber to deploy an app on AWS
-This documents contains instructions for using Rubber to prepare an app with a basic framework
+This documents contains instructions for using Rubber (v1.15) to prepare an app with a basic framework
 for a single server deployment on AWS.
 
 ##Prepare the app
