@@ -4,12 +4,15 @@ Helpful MySQL commands for creating databases and users and granting privileges
     SHOW DATABASES;
     SHOW TABLES;
     CREATE DATABASE rxmeditrend;
+    USE rxmeditrend;                                    # switch to a database
+    
+    SELECT User, Host FROM mysql.user;                  # List all the users in the system
     CREATE USER 'username' IDENTIFIED BY 'password';
-    SELECT Host, User FROM mysql.user;
     GRANT ALL ON rxmeditrend.* TO 'username';
     SHOW GRANTS FOR 'username';
     SET PASSWORD FOR 'username' = 'password';
-    SHOW TABLE STATUS - shows size of table used and amount of free space than can be reclaimed in Data_free
+    
+    SHOW TABLE STATUS; # shows size of table used and amount of free space than can be reclaimed in Data_free
 
 # MyISAM Tables
 MyISAM data is stored in database-specific directories under the root MySQL data directory. Each table has
