@@ -46,20 +46,21 @@ the contents of `gd_bundle.crt` to the end of `domain.com.crt`.
 Place `domain.com.key` and the amended `domain.com.crt` into `config/secrets/certs`
 
 ### 7. Configure Nginx to use SSL certificate
-Edit `config/rubber/role/passenger_nginx/passenger_nginx.conf` and update the SSL
-section of the file to match.
+Edit `config/rubber/role/passenger_nginx/passenger_nginx.conf` and
+`config/rubber/role/web_tools/nginx-tools.conf` and update the SSL sections of the
+files as shown below. There are three sections total.
 
     <% if rubber_env.use_ssl_key %>
-    ssl_certificate <%= RUBBER_ROOT %>/config/secrets/certs/<%= rubber_env.domain %>.crt;
-    ssl_certificate_key <%= RUBBER_ROOT %>/config/secrets/certs/<%= rubber_env.domain %>.key;
+      ssl_certificate <%= Rubber.root %>/config/secrets/certs/<%= rubber_env.domain %>.crt;
+      ssl_certificate_key <%= Rubber.root %>/config/secrets/certs/<%= rubber_env.domain %>.key;
     <% else %>
-    ssl_certificate  /etc/ssl/certs/ssl-cert-snakeoil.pem;
-    ssl_certificate_key  /etc/ssl/private/ssl-cert-snakeoil.key;
-    <% end %>  
-
+      ssl_certificate  /etc/ssl/certs/ssl-cert-snakeoil.pem;
+      ssl_certificate_key  /etc/ssl/private/ssl-cert-snakeoil.key;
+    <% end %>
+    
 Edit `config/rubber/rubber-passenger_nginx.yml` and make sure SSL is enabled
 
-    use_ssl_key: yes
+    use_ssl_key: true
 
 ### 8. Configure Rails app to use SSL connection
 Tell rails to redirect all requests to SSL and use secure cookies. Edit
