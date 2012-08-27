@@ -10,7 +10,7 @@ Using AWS web-based console:
   * Start the instance
   * Re-associate the elastic IP with the new instance
   
-Although, the AWS-id of the new virtual machine will be the same, it will have a new private IP Addresse,
+Although, the AWS-id of the new virtual machine will be the same, it will have a new private IP Address,
 and DNS name. You will need to update the server configuration to use the new private IP address.
 Get the server's private IP address and private DNS from the AWS console. Edit `instance-production.yml`
 and update the appropriate fields (shown below)
@@ -22,8 +22,8 @@ and update the appropriate fields (shown below)
       image_id: ami-61be7908
       image_type: c1.medium
       instance_id: i-17c7a376
-      internal_host: ip-10-66-102-94.ec2.internal  <<== Put new Private DNS here
-      internal_ip: 10.214.130.113   <<== Put new Private IP address here
+      internal_host: ip-10-66-102-94.ec2.internal   <<-- Put new Private DNS here
+      internal_ip: 10.214.130.113                   <<-- Put new Private IP address here
       .
       .
       .
@@ -32,6 +32,9 @@ Push new configuration to the server and restart appropriate services to apply t
 
       bundle exec cap rubber:setup_remote_aliases
       bundle exec cap deploy
+
+If you're using Munin, you might want to reset the munin graphs:
+<http://serverfault.com/questions/189014/how-to-reset-munin-graphs>
 
 ##AWS Instance types
 For the web applications I'm developing there are three instance types that make sense.
