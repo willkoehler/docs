@@ -265,6 +265,10 @@ Generate an integration test (i.e. request spec). Integration test will be creat
 
 
 #Misc
+Open up the db console
+
+    rails dbconsole
+
 Show list of current routes
 
     bundle exec rake routes
