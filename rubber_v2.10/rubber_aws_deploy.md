@@ -15,10 +15,14 @@ Add the following lines to your Gemfile and update your gems with "`bundle insta
 ##Vulcanize the app to setup the necessary files for Rubber.
 We vulcanize each role manually, rather than use an all-in-one generator like "`complete_passenger_mysql`"
 
+We're using munin instead of collecd+graphite because Rubber doesn't yet support collectd+graphite in a
+Passenger + Nginx configuration. We minimize the number of munin charts to minimize the impact that munin
+has on the server, so munin is an adequate solution for now. 
+
     bundle exec rubber vulcanize minimal_passenger_nginx
     bundle exec rubber vulcanize mysql
     bundle exec rubber vulcanize monit
-    bundle exec rubber vulcanize collectd
+    bundle exec rubber vulcanize munin
 
 ##Create config/secrets/rubber-secret.yml
 Values entered into `rubber-secret.yml` override corresponding values in `rubber.yml`. Put your AWS
@@ -58,7 +62,7 @@ details on some of the required parameters.
 
 ###Chose your instance type
 Tell Rubber what type of instance to create (`image_type`) and what AMI to use as a basis for the instance
-(`image_id`). You can find the latest official Ubuntu AMIs here: [http://alestic.com/](http://alestic.com/)
+(`image_id`). You can find the latest official Ubuntu AMIs here: <http://alestic.com/>
 It's always best to check alestic.com for the latest AMIs because they change often. I recommend using Ubuntu
 12.04 LTS Precise EBS boot.
 
@@ -112,14 +116,16 @@ By default Rubber sets up the app, db, log files, ect in /mnt. But this doesn't 
 and EBS volume for those (as described above). One simple solution is to mount an EBS volume on `/ebs` and
 move all assets to `/ebs` by doing a global search and replace in your app, replacing `"/mnt/"` with `"/ebs/"`
 
-##Edit rubber-passenger_nginx.yml and change the HTTP ports
+##Make a few config changes
+
+###Edit rubber-passenger_nginx.yml and change the HTTP ports
 Rubber assumes haproxy is always installed and sets up the HTTP ports accordingly. Since we are not using haproxy
 at this time, we need to tell passenger to listen on ports 80,443
 
     passenger_listen_port: 80
     passenger_listen_ssl_port: 443
 
-##Edit config/rubber/common/database.yml.
+###Edit config/rubber/common/database.yml.
 Add a socket line and comment out the host line. The socket connection is faster and will work on a
 single-server deployment.
 
@@ -135,7 +141,7 @@ Add this line:
 
     adapter: mysql2
 
-##Edit deploy-mysql.rb
+###Edit deploy-mysql.rb (will be fixed in next Rubber release)
 MySQL 5.5, which is included with Unbuntu 12.04, has an Anonymous Account that conflicts with the account
 that Rubber creates. We must delete this account during the deploy. Add the following line in the
 `create_master_db` script
@@ -145,6 +151,20 @@ that Rubber creates. We must delete this account during the deploy. Add the foll
       mysql -u root -e "delete from mysql.user where user='' and host='localhost';"    <<-- ADD THIS LINE
       ...
     ENDSCRIPT
+
+###Edit passenger_nginx/application.conf (pull request pending)
+Add the following block to the bottom of the file to optimize caching of precompiled assets
+
+    # Give static assets a far-future header and serve the pre-compressed version of the asset
+    # instead of compressing on the fly.
+    location ~ ^/(assets)/ {
+      gzip_static on;
+      expires     max;
+      add_header  Cache-Control public;
+      add_header  Last-Modified "";
+      add_header  ETag "";
+      break;
+    }
 
 ##Edit deploy.rb to customize the deploy process
 ###Enable push\_instance\_config
@@ -314,9 +334,23 @@ You will also need to remove several files from you app. Otherwise several chart
 the next deploy.
 
     rm script/munin/example_mysql_query.rb
-    rm sctipt/munin/example_simple.rb
+    rm script/munin/example_simple.rb
     rm config/rubber/role/passenger_nginx/munin-passenger-memory.conf
     rm config/rubber/role/passenger_nginx/munin-passenger.conf
+
+##Other Cleanup
+Configure the popularity contest package. This prevents failures in /etc/cron.daily/popularity-contest
+The packages is installed but not configured. It's a known problem with the 12.04 ami image:
+<https://bugs.launchpad.net/ubuntu/+source/popularity-contest/+bug/707311> To configure it
+run this command on the server
+
+    sudo dpkg-reconfigure popularity-contest
+
+Create upstart log directory. This prevents failures in /etc/cron.daily/logrotate. It's a known problem
+with the 12.04 ami image: <http://osdir.com/ml/ubuntu-bugs/2012-04/msg63377.html>
+
+    mkdir /var/log/upstart
+
 
 # Recovering from failures
 
