@@ -303,3 +303,23 @@ Paperclip updates the created_at date for the model which causes it to save a ne
 version of the attachments in the CMS app.
 
     bundle exec rake paperclip:refresh:thumbnails CLASS=Contract --trace
+
+# DateTime performance
+
+There are several methods for calculating dates. The most readable `7.months.ago` is very slow.
+Several other methods produce the same results with significantly faster performance
+
+## 16.days.ago is very slow
+
+    irb(main):098:0> Benchmark.measure { 100000.times { 16.days.ago } }
+    =>   9.300000   0.030000   9.330000 (  9.329083)
+
+## DateTime.now - 16.days is more efficient
+
+    irb(main):099:0> Benchmark.measure { 100000.times { DateTime.now - 16.days } }
+    =>   1.750000   0.020000   1.770000 (  1.772659)
+
+# DateTime.now - 16 is the fastest
+
+    irb(main):100:0> Benchmark.measure { 100000.times { DateTime.now - 16 } }
+    =>   0.190000   0.000000   0.190000 (  0.198303)
