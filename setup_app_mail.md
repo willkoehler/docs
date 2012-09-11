@@ -100,4 +100,4 @@ Make changes to the following files.
 ### 9. Test the SPF records
 Send an email to `check-auth2@verifier.port25.com` from both your Google Apps email
 account and from your application via Amazon SES. You will receive a reply with the results of
-the SPF check. It should be "pass". More information: <http://www.port25.com/domainkeys/>
+the SPF check. It should be "pass". More information: <http://www.port25.com/support/authentication-center/email-verification/>
