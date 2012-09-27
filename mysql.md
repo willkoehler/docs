@@ -9,8 +9,9 @@ Helpful MySQL commands for creating databases and users and granting privileges
     SELECT User, Host FROM mysql.user;                  # List all the users in the system
     CREATE USER 'username' IDENTIFIED BY 'password';
     GRANT ALL ON rxmeditrend.* TO 'username';
-    SHOW GRANTS FOR 'username';
-    SET PASSWORD FOR 'username' = 'password';
+    SHOW GRANTS FOR 'username'@'host';
+    SET PASSWORD FOR 'username'@'host' = PASSWORD('password');
+    FLUSH PRIVILEGES;                                   # Flush privileges after manually manipulating the user table
     
     SHOW TABLE STATUS; # shows size of table used and amount of free space than can be reclaimed in Data_free
 
