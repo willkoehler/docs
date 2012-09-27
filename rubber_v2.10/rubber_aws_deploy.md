@@ -397,6 +397,15 @@ Recreate and redeploy the a new instance
 Rubber will attach and mount the existing EBS volumes during the bootstrap. Rubber will not format or overwrite
 data on an existing EBS volume.
 
+After rebuilding the server, you may get nightly errors from `/etc/cron.daily/logrotate`. In this case you need
+to fix the password for the `debian-sys-maint` user in MySQL. Get the correct password from `/etc/mysql/debian.cnf`.
+Update the password by running MySQL on the server as root and changing the password.
+
+    mysql -u root
+    ...
+    mysql> SET PASSWORD FOR 'debian-sys-maint'@'localhost' = PASSWORD('ThePassword');
+    mysql> quit
+
 ##Recovering if the EBS volume is corrupted or both the instance and the EBS volume are lost
 This is a little heavy-handed if the instance has not been lost. But it's simpler than recreating and
 attaching an EBS volume to a running instance.
