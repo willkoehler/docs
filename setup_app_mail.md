@@ -59,8 +59,11 @@ minutes to verify your MX records after you've enabled email.
 
 ### 5. Setup a SPF record for the domain
 Using your Domain Manager, add the following TXT record to the domain's zone file.
+NOTE: some DNS providers, such as Route 53, allow you to setup true SPF records. However Gmail
+ignores true SPF records. To be safe use TXT records. It appears true SPF records are not
+widely used, or supported.
 
-    HOST=@ VALUE="v=spf1 a mx include:amazonses.com include:_spf.google.com -all" TTL=1 Hour
+    "v=spf1 a mx include:amazonses.com include:_spf.google.com -all"
 
 SPF records are used by email recipients to authenticate the source of emails. SPF records
 list which IP addresses & domains are authorized to send email on behalf of your domain.
