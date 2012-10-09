@@ -1,3 +1,9 @@
+# Renew GoDaddy SSL Cerfificate
+When renewing a GoDaddy SSL certificate, you don't need to generate a new key or csr. GoDaddy
+keeps the old csr on file and allows you to reuse it. You just need to renew the cerificate
+with the old csr, download the new crt file and redeploy. Need to document the specific steps next
+time I renew.
+
 # Setup SSL certificate for a Rails app.
 These instructions assume you're using Rubber to manage the app's server configuration
 
@@ -70,3 +76,4 @@ Tell rails to redirect all requests to SSL and use secure cookies. Edit
 
 ### 9. Test the SSL certificate
 <http://www.ssltest.net> or <https://www.ssllabs.com/ssldb/>
+
