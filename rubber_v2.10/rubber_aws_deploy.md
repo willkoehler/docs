@@ -373,6 +373,9 @@ with the 12.04 ami image: <http://osdir.com/ml/ubuntu-bugs/2012-04/msg63377.html
 
     mkdir /var/log/upstart
 
+##Swap File
+The Ubuntu AMIs don't use swap files. To setup a swap file on the server, follow instructions here
+<http://serverfault.com/questions/218750/why-ec2-ubuntu-images-dont-have-swap>
 
 # Recovering from failures
 
