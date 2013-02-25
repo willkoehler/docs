@@ -1,5 +1,5 @@
 #Using Rubber to deploy an app on AWS
-This documents contains instructions for using Rubber (v2.10) to prepare an app with a basic framework
+This documents contains instructions for using Rubber (v2.2.2) to prepare an app with a basic framework
 for a single server deployment on AWS.
 
 ##Prepare the app
@@ -8,16 +8,23 @@ that you don't want checked into source control.
 
     mkdir -p config/secrets
     
-Add the following lines to your Gemfile and update your gems with "`bundle install`"
+Add Rubber your Gemfile and update your gems with "`bundle install`"
 
     gem 'rubber'
+
+If you are pre-compiling assets on the server (the default config), you also need to setup a JavaScript
+runtime on the server. The easiest way to do this is adding therubyracer gem to your Gemfile
+
+    group :production do
+      gem 'therubyracer', :require => false   # javascript runtime for pre-compiling assets on the server
+    end
 
 ##Vulcanize the app to setup the necessary files for Rubber.
 We vulcanize each role manually, rather than use an all-in-one generator like "`complete_passenger_mysql`"
 
-We're using munin instead of collecd+graphite because Rubber doesn't yet support collectd+graphite in a
-Passenger + Nginx configuration. We minimize the number of munin charts to minimize the impact that munin
-has on the server, so munin is an adequate solution for now. 
+We're using munin instead of collecd+graphite because support for collectd+graphite in a Passenger + Nginx
+configuration is still in the early stages. We minimize the number of munin charts to minimize the impact
+that munin has on the server, so munin is an adequate solution for now. 
 
     bundle exec rubber vulcanize minimal_passenger_nginx
     bundle exec rubber vulcanize mysql
@@ -67,7 +74,7 @@ It's always best to check alestic.com for the latest AMIs because they change of
 12.04 LTS Precise EBS boot.
 
     image_type: m1.small
-    image_id: ami-013f9768    # Check alestic.com for latest AMI (look in right-hand column for UBUNTU AMIS)
+    image_id: ami-de0d9eb7    # Check alestic.com for latest AMI (look in right-hand column for UBUNTU AMIS)
 
 ###Setup web tools username and password
 Setup a username and password to control access to the web tools (munin/monit). Uncomment the following
@@ -119,8 +126,8 @@ move all assets to `/ebs` by doing a global search and replace in your app, repl
 ##Make a few config changes
 
 ###Edit rubber-passenger_nginx.yml and change the HTTP ports
-Rubber assumes haproxy is always installed and sets up the HTTP ports accordingly. Since we are not using haproxy
-at this time, we need to tell passenger to listen on ports 80,443
+Rubber assumes haproxy is always installed and sets up the HTTP ports accordingly. Since we are not using
+haproxy, we need to tell passenger to listen on ports 80,443
 
     passenger_listen_port: 80
     passenger_listen_ssl_port: 443
@@ -140,31 +147,6 @@ Remove this line
 Add this line:
 
     adapter: mysql2
-
-###Edit deploy-mysql.rb (will be fixed in next Rubber release)
-MySQL 5.5, which is included with Unbuntu 12.04, has an Anonymous Account that conflicts with the account
-that Rubber creates. We must delete this account during the deploy. Add the following line in the
-`create_master_db` script
-
-    rubber.sudo_script "create_master_db", <<-ENDSCRIPT
-      mysql -u root -e "create database #{env.db_name};"
-      mysql -u root -e "delete from mysql.user where user='' and host='localhost';"    <<-- ADD THIS LINE
-      ...
-    ENDSCRIPT
-
-###Edit passenger_nginx/application.conf (pull request pending)
-Add the following block to the bottom of the file to optimize caching of precompiled assets
-
-    # Give static assets a far-future header and serve the pre-compressed version of the asset
-    # instead of compressing on the fly.
-    location ~ ^/(assets)/ {
-      gzip_static on;
-      expires     max;
-      add_header  Cache-Control public;
-      add_header  Last-Modified "";
-      add_header  ETag "";
-      break;
-    }
 
 ##Edit deploy.rb to customize the deploy process
 ###Enable push\_instance\_config
@@ -187,30 +169,6 @@ We need to push these files to the server manually during deploy.
       end
     end
     
-###Add a task to precompile assets
-This task compiles assets on the dev system and then pushes them up to the server. This avoids
-several problems caused by compiling assets on the server, including blowing the CPU burst window
-on t1.micro instances and tricky timing issues related to when the assets need to be compiled in
-the deploy cycle (after rubber:update, but before server restart).
-
-    namespace :deploy do
-      desc "precompile and deploy the assets to the server"
-      after "deploy:update_code", "deploy:precompile_assets"
-      task :precompile_assets, :roles => :app do
-        run_locally "#{rake} RAILS_ENV=#{rails_env} RAILS_GROUPS=assets assets:precompile"
-        transfer(:up, "public/assets", "#{release_path}/public/assets") { print "." }
-        run_locally "rm -rf public/assets"    # clean up to avoid conflicts with development-mode assets
-      end
-    end
-
-###Remove the Rubber deploy assets task
-This is not longer needed because we are precompiling assets locally. Delete these lines
-
-    if Rubber::Util.has_asset_pipeline?
-      # load asset pipeline tasks, and reorder them to run after
-      ...
-    end
-
 ###Use github for deploy
 The trick here is to use `ssh_options[:forward_agent] = true` so that the server can use our
 local github key to pull the deploy. Also use remote_cache to speed up deploys.
@@ -223,6 +181,31 @@ local github key to pull the deploy. Also use remote_cache to speed up deploys.
     ssh_options[:forward_agent] = true  # Magic! lets the server use our local github key to pull the deploy
     set :deploy_via, :remote_cache
     
+###(Optional) Add a task to precompile assets on the dev system
+This task compiles assets on the dev system and then pushes them up to the server. This is
+desirable in some situations. When deploying to a t1.micro instance, precompiling the assets on
+the server blows the CPU burst window and makes the server unresponsive for a long period of time.
+Precompiling assets locally also eliminates the need for installing a JavaScript runtime on the
+server (i.e. therubyracer)
+
+    namespace :deploy do
+      desc "precompile and deploy the assets to the server"
+      after "deploy:update_code", "deploy:precompile_assets"
+      task :precompile_assets, :roles => :app do
+        run_locally "#{rake} RAILS_ENV=#{rails_env} RAILS_GROUPS=assets assets:precompile"
+        transfer(:up, "public/assets", "#{release_path}/public/assets") { print "." }
+        run_locally "rm -rf public/assets"    # clean up to avoid conflicts with development-mode assets
+      end
+    end
+
+The Rubber precompile assets task is no longer needed because we are precompiling assets locally.
+Delete these lines.
+
+    if Rubber::Util.has_asset_pipeline?
+      # load asset pipeline tasks, and reorder them to run after
+      ...
+    end
+
 ##Backups via EBS snapshots (optional)
 EBS snapshots provide an excellent backup mechanism for applications running on AWS.
 The task below is hardcoded to work with a single-server deployment with a single EBS
@@ -305,8 +288,6 @@ them all at once here.
 
 * **Instance roles**: Just press enter to accept the defaults you configured in `instance_rolls` in `rubber.yml`
 
-The entire creation and deployment process takes about 25 minutes with the bulk of the time in the bootstrap step.
-
 **NOTE: Check the console output carefully for errors after each step.** You don't need to scan the entire
 console output, just the last few lines. Rubber is good about stopping if there is an error and will display
 a meaningful error message. But with so much console output you might not notice unless you pay attention.
@@ -321,10 +302,6 @@ On subsequent deploys, you only need to deploy and optionally migrate the databa
 
     bundle exec cap deploy               # deploy the app (afte the first deploy)
     bundle exec cap deploy:migrate       # (if needed) to install db migrations
-
-Run at any time to update packages on the server.
-
-    bundle exec cap rubber:bootstrap     # updates packages on the server if server is already bootstrapped
 
 You should be able to re-run rubber:bootstrap any time. If the bootstrapping process is interrupted, 
 rubber:bootstrap is smart enough to pick up where it left off. If, for some reason, rubber:bootstrap
@@ -359,19 +336,6 @@ the next deploy.
     rm script/munin/example_simple.rb
     rm config/rubber/role/passenger_nginx/munin-passenger-memory.conf
     rm config/rubber/role/passenger_nginx/munin-passenger.conf
-
-##Other Cleanup
-Configure the popularity contest package. This prevents failures in /etc/cron.daily/popularity-contest
-The packages is installed but not configured. It's a known problem with the 12.04 ami image:
-<https://bugs.launchpad.net/ubuntu/+source/popularity-contest/+bug/707311> To configure it
-run this command on the server
-
-    sudo dpkg-reconfigure popularity-contest
-
-Create upstart log directory. This prevents failures in /etc/cron.daily/logrotate. It's a known problem
-with the 12.04 ami image: <http://osdir.com/ml/ubuntu-bugs/2012-04/msg63377.html>
-
-    mkdir /var/log/upstart
 
 ##Swap File
 The Ubuntu AMIs don't use swap files. To setup a swap file on the server, follow instructions here
