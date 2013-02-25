@@ -56,6 +56,14 @@ For the web applications I'm developing there are three instance types that make
 * I/O Performance: Moderate
 * API name: m1.small
 
+###Medium Instance
+* 3.75 GB of memory
+* 2 EC2 Compute Units (1 virtual core with 2 EC2 Compute Unit)
+* 410 GB of instance storage
+* 32-bit or 64-bit platform
+* I/O Performance: Moderate
+* API name: m1.medium
+
 ###High-CPU Medium Instance
 * 1.7 GB of memory
 * 5 EC2 Compute Units (2 virtual cores with 2.5 EC2 Compute Units each)
@@ -67,11 +75,13 @@ For the web applications I'm developing there are three instance types that make
 ###Month-to-month pricing:
 * **t1.micro:** $14.60/month
 * **m1.small:** $58.40/month
+* **m1.medium:** $120.45/month
 * **c1.medium:** $120.45/month
 
 ###Pricing with a 3 year commitment (heavy utilization)
 * **t1.micro:** $6.42/month
 * **m1.small:** $17.82/month
+* **m1.medium:** $120.45/month
 * **c1.medium:** $47.07/month
 
 ##AWS Micro (t1.micro) instances
