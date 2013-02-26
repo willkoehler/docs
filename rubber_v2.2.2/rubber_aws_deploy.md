@@ -193,6 +193,7 @@ server (i.e. therubyracer)
       after "deploy:update_code", "deploy:precompile_assets"
       task :precompile_assets, :roles => :app do
         run_locally "#{rake} RAILS_ENV=#{rails_env} RAILS_GROUPS=assets assets:precompile"
+        run "mkdir -p #{release_path}/public/assets"
         transfer(:up, "public/assets", "#{release_path}/public/assets") { print "." }
         run_locally "rm -rf public/assets"    # clean up to avoid conflicts with development-mode assets
       end
