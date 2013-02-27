@@ -165,6 +165,7 @@ We need to push these files to the server manually during deploy.
       after "deploy:update_code", "deploy:app_secrets"
       desc "Push contents of config/secrets folder to the remote server"
       task :app_secrets do
+        run "mkdir -p #{release_path}/config/secrets"
         transfer(:up, "config/secrets", "#{release_path}/config/secrets") { print "." }
       end
     end
