@@ -18,20 +18,10 @@
     make
     sudo make install
     
-### Build rdoc documentation.
-
-This is an optional step if you want the rdoc documentation. Looks like the makefile only
-builds ri docs. The only option for building html-formatted docs is manually running rdoc.
-First need to remove the empty doc folder.
-
-    sudo rm -r /usr/local/ruby/share/doc
-    sudo ./bin/rdoc --no-force-update --all --op /usr/local/ruby/share/doc
-
 ### Setup path to the Ruby you just installed
-Edit /etc/paths and add "/usr/local/ruby/bin" to first line so new version of ruby is the
-default. Exit and open the terminal window to apply changes.
 
-    mate /etc/paths
+Edit /etc/paths and add `/usr/local/ruby/bin` to the first line so the new version
+of ruby is the default. Exit and open the terminal window to apply changes.
 
 ### Verify Ruby is working and version is 1.9.3p194
 
@@ -41,3 +31,12 @@ default. Exit and open the terminal window to apply changes.
 
     sudo gem update --system
     sudo gem install bundler
+
+### Build rdoc documentation (optional)
+
+This is an optional step if you want the rdoc documentation. Looks like the makefile only
+builds ri docs. The only option for building html-formatted docs is manually running rdoc.
+First need to remove the empty doc folder.
+
+    sudo rm -r /usr/local/ruby/share/doc
+    sudo ./bin/rdoc --no-force-update --all --op /usr/local/ruby/share/doc
