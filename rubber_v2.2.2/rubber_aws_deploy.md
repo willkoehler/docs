@@ -325,6 +325,7 @@ selected below seem to provide a good balance with minimal load.
     rm *
     ln -s /usr/share/munin/plugins/cpu cpu
     ln -s /usr/share/munin/plugins/diskstats diskstats
+    ln -s /usr/share/munin/plugins/df df
     ln -s /usr/share/munin/plugins/http_loadtime http_loadtime
     ln -s /usr/share/munin/plugins/load load
     ln -s /usr/share/munin/plugins/memory memory
