@@ -125,12 +125,18 @@ move all assets to `/ebs` by doing a global search and replace in your app, repl
 
 ##Make a few config changes
 
-###Edit rubber-passenger_nginx.yml and change the HTTP ports
-Rubber assumes haproxy is always installed and sets up the HTTP ports accordingly. Since we are not using
-haproxy, we need to tell passenger to listen on ports 80,443
+###Edit rubber-passenger_nginx.yml
+Change the HTTP ports. Rubber assumes haproxy is always installed and sets up the HTTP ports accordingly.
+Since we are not using haproxy, we need to tell passenger to listen on ports 80,443
 
     passenger_listen_port: 80
     passenger_listen_ssl_port: 443
+
+Reduce the number of workers. 20 is too high for a small server. I try to set the number of workers
+so that there is at least 1 "spare" worker that isn't processing many requests. Running `passenger-status`
+on the server after it's been up a few days will tell you how many requests each worker is processing.
+
+    max_app_connections: 5
 
 ###Edit config/rubber/common/database.yml.
 Add a socket line and comment out the host line. The socket connection is faster and will work on a
@@ -147,6 +153,22 @@ Remove this line
 Add this line:
 
     adapter: mysql2
+
+###Edit config/rubber/role/passenger_nginx/application.conf
+
+Remove conflicting `passenger_min_instances`. The setting `passenger_min_instances 1` conflicts
+with the setting in nginx.conf. Remove this line
+
+    passenger_min_instances 1;
+
+###Edit config/rubber/role/passenger_nginx/nginx.conf
+
+Add `passenger_max_requests` to restart worker processes after x requests. This is the easiest way
+I can find to keep memory bloat under control.
+
+    passenger_max_requests 4000;
+
+###Restart Passenger workers after
 
 ##Edit deploy.rb to customize the deploy process
 ###Enable push\_instance\_config
