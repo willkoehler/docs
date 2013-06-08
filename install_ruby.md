@@ -40,3 +40,11 @@ First need to remove the empty doc folder.
 
     sudo rm -r /usr/local/ruby/share/doc
     sudo ./bin/rdoc --no-force-update --all --op /usr/local/ruby/share/doc
+
+# Uninstall all gems on the system
+
+A pretty slick technique to uninstall all gems in case it's ever needed.
+
+    gem list --no-version | xargs gem uninstall -aIx
+
+<http://jamespmcgrath.com/how-to-uninstall-all-ruby-gems-in-one-line/>
