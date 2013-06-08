@@ -206,7 +206,14 @@ Several other methods produce the same results with significantly faster perform
     irb(main):099:0> Benchmark.measure { 100000.times { DateTime.now - 16.days } }
     =>   1.750000   0.020000   1.770000 (  1.772659)
 
-# DateTime.now - 16 is the fastest
+## DateTime.now - 16 is the fastest
 
     irb(main):100:0> Benchmark.measure { 100000.times { DateTime.now - 16 } }
     =>   0.190000   0.000000   0.190000 (  0.198303)
+
+# Troublshooting Apache
+
+If Apache fails silently to start (no error in /var/log/apache2/error_log), try the following
+command to start Apache and display error output
+
+    sudo bash -x /usr/sbin/apachectl -k start
