@@ -44,7 +44,7 @@ In the context of a Rails app this becomes.
     bundle exec gem which gemname
     
 Cleanup all versions of a gem, except for the latest one. If no gemname is given in the command
-line, cleanup will be run agains all installed gems.
+line, cleanup will be run against all installed gems.
 
     gem cleanup gemname
     
@@ -52,31 +52,30 @@ Display environment that RubyGems is running in
 
     gem environment
 
+Uninstall all gems on the system (to start fresh if desired)
+
+    gem list --no-version | xargs gem uninstall -aIx
+
 ### Requiring 'rubygems' no longer necessary
 Ruby 1.9 includes RubyGems by default so you do not need a `require 'rubygems'` statement in
 order to load gem libraries. Just use `require 'gemname'` statements as needed.
 
+#Create New Rails App with PostgreSQL and RSpec
 
-#Use RSpec for testing
-Use RSpec instead of Test::Unit in a Rails app. (Make sure to add rspec-rails gem to your Gemfile.)
-
-    rails new app_name -T       # create Rails app without Test::Unit
-    cd sample_app
-    rails g rspec:install       # generate RSpec files
-
-Remove test for views and helpers.
-
-    rm -rf spec/views
-    rm -rf spec/helpers
+    rails new app_name -T -d postgresql   # create Rails app without Test::Unit
     
-Run tests: all tests, specify subdirectory, specify a spec file, specify specific specs
+Run Bundler, setup the database
 
-    bundle exec rspec spec/
-    bundle exec rspec spec/controllers/
-    bundle exec rspec spec/controllers/your_spec.rb
-    bundle exec rspec spec/controllers/your_spec.rb -e "partial text from spec description"
+    cd app_name
+    bundle --without production   # (--without is a remembered options, only needed the first time)
+    rake db:migrate               # setup the initial database
 
-###Use Guard to run tests automatically
+Setup RSpec (must add `gem 'rspec-rails'` to Gemfile)
+
+    rails g rspec:install
+
+
+#Use Guard to run tests automatically
 <http://railscasts.com/episodes/264-guard>
 
 Run Guard in its own terminal tab.
@@ -96,29 +95,22 @@ time Guard runs our test suite.
       .
       .
 
-###Use Spork to speed up tests
+##Use Spork to speed up tests
 <http://railscasts.com/episodes/285>
 
 "Spork improves the loading time of your test suite by starting up your Rails application once
 in the background. Use it with Guard for the ultimate combo in fast feedback while doing TDD"
 
-#Create New Rails App with MySQL and RSpec
 
-    rails new app_name -T -d mysql   # create Rails app without Test::Unit
-    
-Edit Gemfile and add a line for rspec-rails.
 
-    group :development, :test do
-      gem 'rspec-rails'
-      ...
-    end
+#RSpec Commands
 
-Run Bundler, setup the database and generate the RSpec files
+Run tests: all tests, specify subdirectory, specify a spec file, specify specific specs
 
-    cd app_name
-    bundle
-    rake db:migrate             # setup the initial database
-    rails g rspec:install       # generate RSpec files
+    bundle exec rspec spec/
+    bundle exec rspec spec/controllers/
+    bundle exec rspec spec/controllers/your_spec.rb
+    bundle exec rspec spec/controllers/your_spec.rb -e "partial text from spec description"
 
 #Generate Stuff
 Generate a controller
@@ -127,13 +119,6 @@ Generate a controller
     rails g controller Pages home contact about
     rails g controller Sessions new
     
-Generate a controller without specs. NOTE: Ryan Bates doesn't use controller specs
-because the requests specs (i.e. integration tests) test the controller and view
-logic well enough. If logic is too complex for the request spec then it should
-probably go in the model.
-
-    rails g controller Sessions new --no-test-framework
-
 Generate a model
 
     rails g model User field1:string field2:string
@@ -146,10 +131,10 @@ Create a migration
     rails g migration add_salt_to_users salt:string
     rails g migration add_admin_to_users admin:boolean
 
-Generate an integration test (i.e. request spec). Integration test will be created as spec/requests/some_name_spec.
+Generate an integration test (i.e. request spec). Integration test will be created as
+`spec/requests/some_name_spec.`
 
     rails g integration_test some_name
-
 
 #Misc
 Open up the db console
