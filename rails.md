@@ -1,4 +1,4 @@
-#Bundler
+# Bundler
 
 Check to see if all app dependencies are met and install gems that are needed to meet the dependencies.
 
@@ -33,7 +33,7 @@ Open the contents of a gem in the text editor specified in your shell ($EDITOR o
 
     bundle open gem-name
 
-#RubyGems
+# RubyGems
 
 See which specific gem is being used and where it's located.
 
@@ -60,7 +60,7 @@ Uninstall all gems on the system (to start fresh if desired)
 Ruby 1.9 includes RubyGems by default so you do not need a `require 'rubygems'` statement in
 order to load gem libraries. Just use `require 'gemname'` statements as needed.
 
-#Create New Rails App with PostgreSQL and RSpec
+# Create New Rails App with PostgreSQL and RSpec
 
     rails new app_name -T -d postgresql   # create Rails app without Test::Unit
     
@@ -75,7 +75,8 @@ Setup RSpec (must add `gem 'rspec-rails'` to Gemfile)
     rails g rspec:install
 
 
-#Use Guard to run tests automatically
+# Use Guard to run tests automatically
+
 <http://railscasts.com/episodes/264-guard>
 
 Run Guard in its own terminal tab.
@@ -95,7 +96,8 @@ time Guard runs our test suite.
       .
       .
 
-##Use Spork to speed up tests
+## Use Spork to speed up tests
+
 <http://railscasts.com/episodes/285>
 
 "Spork improves the loading time of your test suite by starting up your Rails application once
@@ -103,7 +105,7 @@ in the background. Use it with Guard for the ultimate combo in fast feedback whi
 
 
 
-#RSpec Commands
+# RSpec Commands
 
 Run tests: all tests, specify subdirectory, specify a spec file, specify specific specs
 
@@ -112,7 +114,7 @@ Run tests: all tests, specify subdirectory, specify a spec file, specify specifi
     bundle exec rspec spec/controllers/your_spec.rb
     bundle exec rspec spec/controllers/your_spec.rb -e "partial text from spec description"
 
-#Generate Stuff
+# Generate Stuff
 Generate a controller
 
     rails g controller Users new
@@ -136,7 +138,8 @@ Generate an integration test (i.e. request spec). Integration test will be creat
 
     rails g integration_test some_name
 
-#Misc
+# Misc
+
 Open up the db console
 
     rails dbconsole

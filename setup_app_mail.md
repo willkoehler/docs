@@ -1,15 +1,19 @@
 # Setup Amazon SES and Google apps to provide email services for a Rails app.
+
 Use Google Apps to host email for your application's domain. This allows you to receive
 replies from your web app's emails and to correspond with your users. Use Amazon SES to send
 email from within your application.
 
 ### 1. Sign up for a free Google Apps account for your domain
+
 <http://www.google.com/apps/intl/en/group/index.html><br>
 
 ### 2. Verify you own the domain
+
 Follow the steps provided by Google Apps.
 
 ### 3. Setup MX records for the domain
+
 Using your Domain Manager (ex: GoDaddy), delete existing MX records and add the following MX
 records to the domain's zone file.
 
@@ -53,11 +57,13 @@ records to the domain's zone file.
 </table>
 
 ### 4. Enable email in Google Apps
+
 Google Apps Dashboard page / Service Settings section / Email. Enable email and inform Google
 Apps the the MX records are setup. It will take Google Apps will take a few
 minutes to verify your MX records after you've enabled email.
 
 ### 5. Setup a SPF record for the domain
+
 Using your Domain Manager, add the following TXT record to the domain's zone file.
 NOTE: some DNS providers, such as Route 53, allow you to setup true SPF records. However Gmail
 ignores true SPF records. To be safe use TXT records. It appears true SPF records are not
@@ -74,12 +80,14 @@ server (a) and servers defined by the MX records (mx) to send email, although we
 use these.
 
 ### 7. Setup a reply-to email
+
 * Setup a new user in Google Apps to receive email replies. (Or setup an alias
 for the primary administrator account.)
 * Use the AWS Management Console to register the email address as a SES Verified Sender.
 This allows you to use the email as the "from" address when sending emails via SES
 
 ### 8. Setup your application to use Amazon SES
+
 Make changes to the following files.
 
 `Gemfile`
@@ -101,6 +109,7 @@ Make changes to the following files.
     config.action_mailer.delivery_method = :ses
 
 ### 9. Test the SPF records
+
 Send an email to `check-auth2@verifier.port25.com` from both your Google Apps email
 account and from your application via Amazon SES. You will receive a reply with the results of
 the SPF check. It should be "pass". More information: <http://www.port25.com/support/authentication-center/email-verification/>

@@ -1,4 +1,5 @@
-#MySQL
+# MySQL
+
 Helpful MySQL commands for creating databases and users and granting privileges
 
     SHOW DATABASES;
@@ -16,6 +17,7 @@ Helpful MySQL commands for creating databases and users and granting privileges
     SHOW TABLE STATUS; # shows size of table used and amount of free space than can be reclaimed in Data_free
 
 # MyISAM Tables
+
 MyISAM data is stored in database-specific directories under the root MySQL data directory. Each table has
 a set of three files:
 
@@ -30,6 +32,7 @@ when it's marked as crashed.)
     REPAIR TABLE tbl_name EXTENDED;
 
 # InnoDB Tables
+
 InnoDB data is stored in the following files
 
 * **ibdata1**: By default all data and indexes for all tables/databases is stored in a single, shared file:
@@ -44,7 +47,8 @@ CHECK TABLE and REPAIR TABLE don't do anything for InnoDB tables.
 
 You can use OPTIMIZE TABLE x on InnoDB tables. It's just an alias for ALTER TABLE x ENGINE=InnoDB
 
-###Shared tablespace (default)
+### Shared tablespace (default)
+
 All data and indexes are stored in a single file, ibdata1, in the MySQL data root directory
 
 To shrink the size of ibdata1, or make any changes to the ibdata configuration (such as enabling per-table
@@ -69,7 +73,8 @@ backup.
         SOURCE backup.sql;
         SET FOREIGN_KEY_CHECKS=1;
 
-###Per-table tablespace
+### Per-table tablespace
+
 Enable per-table tablespace with the `innodb_file_per_table` flag in my.cnf. Data for each table is store in
 individual `tbl_name.idb` files (similar to MyISAM file structure). The `tbl_name.idb` files will shrink when the table is defragmented with
 ALTER TABLE x ENGINE=InnoDB
@@ -81,7 +86,8 @@ ALTER TABLE x ENGINE=InnoDB
 Seems like the default shared tablespace is best unless there is a specific need for per-table tablespace
 (such as a table where records are frequently deleted)
 
-#Infoquest IMS
+# Infoquest IMS
+
 The ibdata1 file on the Infoquest server had grown to 2.9Gbyte. After rebuilding the database on 8/8/2011,
 the ibdata1 file shrunk to 141Mbyte. It's not clear why the ibdata1 file has grown so large.
 

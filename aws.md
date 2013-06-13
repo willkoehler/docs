@@ -1,6 +1,7 @@
-#Amazon Web Services
+# Amazon Web Services
 
-##Changing AWS instance types
+## Changing AWS instance types
+
 It's easy to switch between t1.micro, m1.small, and c1.medium instance types on AWS.
 
 Using AWS web-based console:
@@ -36,10 +37,12 @@ Push new configuration to the server and restart appropriate services to apply t
 If you're using Munin, you might want to reset the munin graphs:
 <http://serverfault.com/questions/189014/how-to-reset-munin-graphs>
 
-##AWS Instance types
+## AWS Instance types
+
 For the web applications I'm developing there are three instance types that make sense.
 
-###Micro Instance
+### Micro Instance
+
 * 613 MB memory
 * Up to 2 EC2 Compute Units (for short periodic bursts)
 * EBS storage only
@@ -48,7 +51,8 @@ For the web applications I'm developing there are three instance types that make
 * API name: t1.micro
 * see details in AWS Micro (t1.micro) instances below
 
-###Small Instance
+### Small Instance
+
 * 1.7 GB memory
 * 1 EC2 Compute Unit (1 virtual core with 1 EC2 Compute Unit)
 * 160 GB instance storage
@@ -56,7 +60,8 @@ For the web applications I'm developing there are three instance types that make
 * I/O Performance: Moderate
 * API name: m1.small
 
-###Medium Instance
+### Medium Instance
+
 * 3.75 GB of memory
 * 2 EC2 Compute Units (1 virtual core with 2 EC2 Compute Unit)
 * 410 GB of instance storage
@@ -64,7 +69,8 @@ For the web applications I'm developing there are three instance types that make
 * I/O Performance: Moderate
 * API name: m1.medium
 
-###High-CPU Medium Instance
+### High-CPU Medium Instance
+
 * 1.7 GB of memory
 * 5 EC2 Compute Units (2 virtual cores with 2.5 EC2 Compute Units each)
 * 350 GB of instance storage
@@ -72,19 +78,22 @@ For the web applications I'm developing there are three instance types that make
 * I/O Performance: Moderate
 * API name: c1.medium
 
-###On demand pricing:
+### On demand pricing:
+
 * **t1.micro:** $14.60/month    (out of date?)
 * **m1.small:** $43.80/month    (out of date?)
 * **m1.medium:** $87.60/month   (out of date?)
 * **c1.medium:** $105.85/month  (as of 4/22/2013)
 
-###Pricing with a 3 year commitment (heavy utilization)
+### Pricing with a 3 year commitment (heavy utilization)
+
 * **t1.micro:** $6.42/month   (out of date?)
 * **m1.small:** $17.82/month  (out of date?)
 * **m1.medium:** $35.64/month (out of date?)
 * **c1.medium:** $42.10/month (as of 4/22/2013)
 
-##AWS Micro (t1.micro) instances
+## AWS Micro (t1.micro) instances
+
 On t1.micro instance CPU instances are allocated in bursts. When not bursting, the steady-state CPU
 capacity of the instance is very low - about 2% of the burst capacity. Basically this means your instance
 has access to a fair amount of CPU power for ~10 seconds at a time. If your app does anything CPU
@@ -104,7 +113,8 @@ the instance as a c1.medium and then stop and restart the instance as t1.micro (
 Greg Wilson provides a good illustration of CPU limiting in the real world in [this blog entry](http://gregsramblings.com/2011/02/07/amazon-ec2-micro-instance-cpu-steal/).
 There is a good technical writeup of CPU limiting in [Amazon's official documentation](http://docs.amazonwebservices.com/AWSEC2/latest/UserGuide/index.html?concepts_micro_instances.html)
 
-##%st stat in "top"
+## %st stat in "top"
+
 The %st stat in "top" shows you much much time other VMs are stealing time from your CPU. "st" stands for
 ‘Steal Time’ and is the amount of real cpu that the Xen Hypervisor has allocated to tasks other than
 running your Virtual Machine (such as somebody else’s VM...).
@@ -120,7 +130,8 @@ case steal time pegs at 98% for the remainder of the CPU intensive task, effecti
     Mem:   1757264k total,   323224k used,  1434040k free,    13452k buffers
     Swap:   917496k total,        0k used,   917496k free,    97284k cached
 
-##AWS mounts secondary instance storage to /mnt
+## AWS mounts secondary instance storage to /mnt
+
 All AWS instances are given secondary instance storage (160GB for m1.small instances). By default this
 storage is mounted on `/mnt`. This storage is included in the price of the instance, but will go away
 when the instances fails or is terminated. So it should not be used for essential assets. Because `/mnt`
@@ -129,7 +140,8 @@ is already taken, you cannot easily mount an EBS volume to `/mnt` using Rubber.
 Exception: AWS does not provide secondary instance storage for t1.micro instances. In this case the `/mnt`
 mount point is available for an EBS volume.
 
-##EBS performance and MySQL data
+## EBS performance and MySQL data
+
 There is mixed information on the performance of the instance (ephemeral) storage vs EBS. It appears that
 EBS performance may be better on average but EBS has high variability in random seek times. If EBS
 performance becomes a factor, storing the database in instance storage is an option to consider. But if

@@ -1,8 +1,10 @@
-#Using Rubber to deploy an app on AWS
+# Using Rubber to deploy an app on AWS
+
 This documents contains instructions for using Rubber (v2.2.2 or v.2.5.0) to prepare an app with a
 basic framework for a single server deployment on AWS.
 
-##Prepare the app
+## Prepare the app
+
 If you don't have a "secrets" folder already in your app, create a folder to hold secret files
 that you don't want checked into source control.
 
@@ -25,7 +27,8 @@ needs to be used once and will be applied automatically after that.
 
     bundle --without production
 
-##Vulcanize the app to setup the necessary files for Rubber.
+## Vulcanize the app to setup the necessary files for Rubber.
+
 We vulcanize each role manually, rather than use an all-in-one generator like "`complete_passenger_mysql`"
 
 We're using munin instead of collecd+graphite because support for collectd+graphite in a Passenger + Nginx
@@ -37,7 +40,8 @@ that munin has on the server, so munin is an adequate solution for now.
     bundle exec rubber vulcanize munin
     bundle exec rubber vulcanize monit
 
-##Create config/secrets/rubber-secret.yml
+## Create config/secrets/rubber-secret.yml
+
 Values entered into `rubber-secret.yml` override corresponding values in `rubber.yml`. Put your AWS
 access credentials and other things that you don't want checked into version control in this
 file. The contents of this file should look like:
@@ -69,11 +73,13 @@ the config/secrets folder in your app. You then need to create a public key from
 
     ssh-keygen -y -f config/secrets/your-keypair > config/secrets/your-keypair.pub
 
-##Edit rubber.yml to customize your server configuration
+## Edit rubber.yml to customize your server configuration
+
 Enter all REQUIRED parameters (except AWS access credentials which you defined above) Below are more
 details on some of the required parameters.
 
-###Chose your instance type
+### Chose your instance type
+
 Tell Rubber what type of instance to create (`image_type`) and what AMI to use as a basis for the instance
 (`image_id`). You can find the latest official Ubuntu AMIs here: <http://alestic.com/>
 It's always best to check alestic.com for the latest AMIs because they change often. I recommend using Ubuntu
@@ -82,26 +88,30 @@ It's always best to check alestic.com for the latest AMIs because they change of
     image_type: m1.small
     image_id: ami-de0d9eb7    # Check alestic.com for latest AMI (look in right-hand column for UBUNTU AMIS)
 
-###Setup web tools username and password
+### Setup web tools username and password
+
 Setup a username and password to control access to the web tools (munin/monit). Uncomment the following
 lines and add your own username and password.
 
     web_tools_user: admin
     web_tools_password: yourpw
 
-###Disable auto security groups
+### Disable auto security groups
+
 By default, Rubber creates security group for all possible server roles in case they are needed in the future.
 (AWS doesn't allow you to assign new security groups after you create an instance.) This is not needed in our
 case so set `auto_security_groups` to false
 
     auto_security_groups: false
 
-###Tell Rubber to use rubber-secret.yml
+### Tell Rubber to use rubber-secret.yml
+
 Uncomment the following line and point it to your copy of `rubber-secret.yml`
 
     rubber_secret: "#{File.join(RUBBER_ROOT, 'config', 'secrets', 'rubber-secret.yml')}"
 
-###Define your hosts and EBS volumes
+### Define your hosts and EBS volumes
+
 The host configuration tells rubber which instances are included in your deployment. For our purposes, we are
 setting up a single instance.
 
@@ -124,14 +134,16 @@ There is only one **IMPORTANT CAVEAT**: the mount point `/mnt` is already taken 
 storage. If you try to use this mount point, Rubber will will create an EBS volume and attach it to your
 instance, but silently fail to mount your EBS volume when it discovers that `/mnt` is already taken.
 
-###Update the default mount point in the Rubber recipes and config files
+### Update the default mount point in the Rubber recipes and config files
+
 By default Rubber sets up the app, db, log files, ect in /mnt. But this doesn't work if we want to use
 and EBS volume for those (as described above). One simple solution is to mount an EBS volume on `/ebs` and
 move all assets to `/ebs` by doing a global search and replace in your app, replacing `"/mnt/"` with `"/ebs/"`
 
-##Make a few config changes
+## Make a few config changes
 
-###Edit rubber-passenger_nginx.yml
+### Edit rubber-passenger_nginx.yml
+
 Change the HTTP ports. Rubber assumes haproxy is always installed and sets up the HTTP ports accordingly.
 Since we are not using haproxy, we need to tell passenger to listen on ports 80,443
 
@@ -148,7 +160,8 @@ Add missing `nginx_log_dir` settings (bug introduced in 2.5.0 - pull request pen
 
     nginx_log_dir: /ebs/nginx/logs
 
-###Edit config/rubber/common/database.yml.
+### Edit config/rubber/common/database.yml.
+
 Add a socket line and comment out the host line. The socket connection is faster and will work on a
 single-server deployment.
 
@@ -164,29 +177,32 @@ Add this line:
 
     adapter: mysql2
 
-###Edit config/rubber/role/passenger_nginx/application.conf (pull request pending) 
+### Edit config/rubber/role/passenger_nginx/application.conf (pull request pending) 
 
 Remove conflicting `passenger_min_instances`. The setting `passenger_min_instances 1`
 conflicts with the setting in nginx.conf. Remove this line
 
     passenger_min_instances 1;
 
-###Edit config/rubber/role/passenger_nginx/nginx.conf
+### Edit config/rubber/role/passenger_nginx/nginx.conf
 
 Add `passenger_max_requests` to restart worker processes after x requests. This is the easiest way
 I can find to keep memory bloat under control.
 
     passenger_max_requests 4000;
 
-##Edit deploy.rb to customize the deploy process
-###Enable push\_instance\_config
+## Edit deploy.rb to customize the deploy process
+
+### Enable push\_instance\_config
+
 When `push_instance_config` is enabled, Rubber pushes `instance-production.yml` directly to the server during
 deploy, overriding the version checked into git. If we didn't use this, we would need to check in changes to
 `instance-production.yml` and push them to github after each deploy step.
 
     set :push_instance_config, true
 
-###Add a task to push the contents of config/secrets to the server
+### Add a task to push the contents of config/secrets to the server
+
 `config/secrets` contains files with sensitive information that should not be checked into source control.
 We need to push these files to the server manually during deploy.
 
@@ -200,7 +216,8 @@ We need to push these files to the server manually during deploy.
       end
     end
     
-###Use github for deploy
+### Use github for deploy
+
 The trick here is to use `ssh_options[:forward_agent] = true` so that the server can use our
 local github key to pull the deploy. Also use remote_cache to speed up deploys.
 
@@ -212,7 +229,8 @@ local github key to pull the deploy. Also use remote_cache to speed up deploys.
     ssh_options[:forward_agent] = true  # Magic! lets the server use our local github key to pull the deploy
     set :deploy_via, :remote_cache
     
-###(Optional) Add a task to precompile assets on the dev system
+### (Optional) Add a task to precompile assets on the dev system
+
 This task compiles assets on the dev system and then pushes them up to the server. This is
 desirable in some situations. When deploying to a t1.micro instance, precompiling the assets on
 the server blows the CPU burst window and makes the server unresponsive for a long period of time.
@@ -238,7 +256,8 @@ Delete these lines.
       ...
     end
 
-##Backups via EBS snapshots (optional)
+## Backups via EBS snapshots (optional)
+
 EBS snapshots provide an excellent backup mechanism for applications running on AWS.
 The task below is hardcoded to work with a single-server deployment with a single EBS
 volume and MySQL database. To use EBS snapshots, create a rake file lib/tasks/system.rake
@@ -302,11 +321,12 @@ Disable the Rubber-provided backup cron job defined in `config/rubber/role/db/cr
 NOTE: EBS snapshot backups are required for the last two recovery methods described below.
 
 ## Commit and push all config files to the repo
+
 Before creating the server, you must commit the rubber/config files to the repo and push to the branch
 you're deploying from. Even though the rubber/config files are being pushed directly to the server during
 deploy, the config/rubber directory must exist for this to work.
 
-##Create the server and deploy the application.
+## Create the server and deploy the application.
 
     bundle exec cap rubber:create        # creates the instance on AWS
     bundle exec cap rubber:bootstrap     # sets up the instance, installs all require packages, ruby, etc
@@ -342,11 +362,12 @@ ip-10-2-118-252", try running rubber:refresh
 
     bundle exec cap rubber:refresh      # Refresh hostname aliases on the server
 
-##Connect to the new instance via SSH
+## Connect to the new instance via SSH
 
     ssh -i config/secrets/your-keypair-name root@your.server.url
 
-##Cleanup Munin Charts
+## Cleanup Munin Charts
+
 If left in the default configuration, Munin charts take about 20s to render every 5 minutes, maxing out the CPU. 
 To reduce the number of charts Munin generates, SSH into the instance and run these commands. The charts
 selected below seem to provide a good balance with minimal load.
@@ -368,13 +389,15 @@ the next deploy.
     rm config/rubber/role/passenger_nginx/munin-passenger-memory.conf
     rm config/rubber/role/passenger_nginx/munin-passenger.conf
 
-##Swap File
+## Swap File
+
 The Ubuntu AMIs don't use swap files. To setup a swap file on the server, follow instructions here
 <http://serverfault.com/questions/218750/why-ec2-ubuntu-images-dont-have-swap>
 
 # Recovering from failures
 
-##Recovering if an instance crashes
+## Recovering if an instance crashes
+
 If an instance crashes, Rubber allows you to create a new instance and remount your EBS volumes on the new
 instance. All assets on the EBS volumes will be preserved. The static IP associated with the instance will
 also be preserved and reused when you recreate the instance.
@@ -404,7 +427,8 @@ Update the password by running MySQL on the server as root and changing the pass
     mysql> SET PASSWORD FOR 'debian-sys-maint'@'localhost' = PASSWORD('ThePassword');
     mysql> quit
 
-##Recovering if the EBS volume is corrupted or both the instance and the EBS volume are lost
+## Recovering if the EBS volume is corrupted or both the instance and the EBS volume are lost
+
 This is a little heavy-handed if the instance has not been lost. But it's simpler than recreating and
 attaching an EBS volume to a running instance.
 
