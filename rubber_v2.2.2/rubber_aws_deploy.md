@@ -1,6 +1,6 @@
 #Using Rubber to deploy an app on AWS
-This documents contains instructions for using Rubber (v2.2.2) to prepare an app with a basic framework
-for a single server deployment on AWS.
+This documents contains instructions for using Rubber (v2.2.2 or v.2.5.0) to prepare an app with a
+basic framework for a single server deployment on AWS.
 
 ##Prepare the app
 If you don't have a "secrets" folder already in your app, create a folder to hold secret files
@@ -10,7 +10,7 @@ that you don't want checked into source control.
     
 Add Rubber your Gemfile and update your gems with "`bundle install`"
 
-    gem 'rubber'
+    gem 'rubber', '2.5.0'
 
 If you are pre-compiling assets on the server (the default config), you also need to setup a JavaScript
 runtime on the server. The easiest way to do this is adding therubyracer gem to your Gemfile
@@ -18,6 +18,12 @@ runtime on the server. The easiest way to do this is adding therubyracer gem to 
     group :production do
       gem 'therubyracer', :require => false   # javascript runtime for pre-compiling assets on the server
     end
+
+To avoid installing therubyracer and other production gems on your development machine, run
+bundler using the `--without production` option. This is a remembered option, meaning it only
+needs to be used once and will be applied automatically after that.
+
+    bundle --without production
 
 ##Vulcanize the app to setup the necessary files for Rubber.
 We vulcanize each role manually, rather than use an all-in-one generator like "`complete_passenger_mysql`"
@@ -28,8 +34,8 @@ that munin has on the server, so munin is an adequate solution for now.
 
     bundle exec rubber vulcanize minimal_passenger_nginx
     bundle exec rubber vulcanize mysql
-    bundle exec rubber vulcanize monit
     bundle exec rubber vulcanize munin
+    bundle exec rubber vulcanize monit
 
 ##Create config/secrets/rubber-secret.yml
 Values entered into `rubber-secret.yml` override corresponding values in `rubber.yml`. Put your AWS
@@ -138,6 +144,10 @@ on the server after it's been up a few days will tell you how many requests each
 
     max_app_connections: 5
 
+Add missing `nginx_log_dir` settings (bug introduced in 2.5.0 - pull request pending)
+
+    nginx_log_dir: /ebs/nginx/logs
+
 ###Edit config/rubber/common/database.yml.
 Add a socket line and comment out the host line. The socket connection is faster and will work on a
 single-server deployment.
@@ -154,10 +164,10 @@ Add this line:
 
     adapter: mysql2
 
-###Edit config/rubber/role/passenger_nginx/application.conf
+###Edit config/rubber/role/passenger_nginx/application.conf (pull request pending) 
 
-Remove conflicting `passenger_min_instances`. The setting `passenger_min_instances 1` conflicts
-with the setting in nginx.conf. Remove this line
+Remove conflicting `passenger_min_instances`. The setting `passenger_min_instances 1`
+conflicts with the setting in nginx.conf. Remove this line
 
     passenger_min_instances 1;
 
@@ -167,8 +177,6 @@ Add `passenger_max_requests` to restart worker processes after x requests. This 
 I can find to keep memory bloat under control.
 
     passenger_max_requests 4000;
-
-###Restart Passenger workers after
 
 ##Edit deploy.rb to customize the deploy process
 ###Enable push\_instance\_config
@@ -324,7 +332,7 @@ If your application has db seeds, SSH into server (see instructions below) and s
 
 On subsequent deploys, you only need to deploy and optionally migrate the database
 
-    bundle exec cap deploy               # deploy the app (afte the first deploy)
+    bundle exec cap deploy               # deploy the app (after the first deploy)
     bundle exec cap deploy:migrate       # (if needed) to install db migrations
 
 You should be able to re-run rubber:bootstrap any time. If the bootstrapping process is interrupted, 
@@ -346,13 +354,11 @@ selected below seem to provide a good balance with minimal load.
     cd /etc/munin/plugins
     rm *
     ln -s /usr/share/munin/plugins/cpu cpu
-    ln -s /usr/share/munin/plugins/diskstats diskstats
     ln -s /usr/share/munin/plugins/df df
     ln -s /usr/share/munin/plugins/http_loadtime http_loadtime
     ln -s /usr/share/munin/plugins/load load
     ln -s /usr/share/munin/plugins/memory memory
     ln -s /usr/share/munin/plugins/munin_stats munin_stats
-    ln -s /usr/share/munin/plugins/swap swap
 
 You will also need to remove several files from you app. Otherwise several charts will be recreated on
 the next deploy.
