@@ -1,5 +1,7 @@
 # PostgreSQL
 
+## Installing and setting up database
+
 OS X comes with client-side PostgreSQL tools, but not the server. Use Homebrew to install
 the server
 
@@ -16,6 +18,8 @@ in database.yml
 
     initdb /usr/local/var/postgres
 
+## Starting / Stopping
+
 Start/stop PostgreSQL server using pg_ctl
 
     pg_ctl start -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log
@@ -31,12 +35,15 @@ Then start/stop PostgreSQL using launchctl
     launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
     launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
 
-Helpful command-line commands
+## Common commands
 
-    psql -l             # list all databases
-    psql db_name        # connect to database and open database console
+Command-line commands
 
-Helpful DB console commands
+    psql -l                   # list all databases
+    ps -ef | grep postgres    # get list of current postgres processes
+    psql db_name              # connect to database and open database console
+
+DB console commands
 
     \q                  # quit
     \d                  # list all tables in the databse
