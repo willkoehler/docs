@@ -155,7 +155,8 @@ Database commands
     rake db:drop                # Deletes the database
     rake db:schema:load         # Creates tables and columns within the database following schema.rb
     rake db:setup               # Does db:create, db:schema:load, db:seed
-    rake db:reset               # Does db:drop, db:setup  
+    rake db:reset               # Does db:drop, db:setup
+    rake db:migrate:reset       # Reset db + schema and rebuild using migrations db:drop db:create db:migrate 
 
 Rollback the last db migration / last 3 migrations
 
