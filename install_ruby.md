@@ -1,23 +1,12 @@
 # Install Ruby from scratch on Mac OS X
 
-## Download libyaml and install.
-
-This is a prerequisite for Ruby
-
-    curl -O http://pyyaml.org/download/libyaml/yaml-0.1.4.tar.gz
-    tar xzvf yaml-0.1.4.tar.gz
-    cd yaml-0.1.4
-    ./configure --prefix=/usr/local
-    make
-    sudo make install
-
 ## Update some libraries needed by Ruby.
 
-OS X has old versions of these libraries. Install Homebrew first if needed.
-<http://mxcl.github.io/homebrew/>
+OS X has old versions of readline and openssl. libyaml is not installed in OS X
+Install Homebrew first if needed. <http://mxcl.github.io/homebrew/>
 
     brew update
-    brew install readline openssl
+    brew install readline openssl libyaml
 
 ## Download Ruby source, build and install
 
