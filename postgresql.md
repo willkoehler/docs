@@ -7,7 +7,7 @@ the server
 
     brew install postgresql
 
-Edit /etc/paths and make sure '/usr/local/bin/' is in the path and comes before '/usr/bun'
+Edit /etc/paths and make sure '/usr/local/bin/' is in the path and comes before '/usr/bin'
 so that the Homebrew version of the client-side tools are used instead of the older OS X
 versions.
 
@@ -26,7 +26,7 @@ Start/stop PostgreSQL server using pg_ctl
     pg_ctl stop -D /usr/local/var/postgres
 
 Launch PostgreSQL at login. This starts up PostgreSQL using the database at
-`/usr/local/var/postgres` and stores the log file in that directory
+`/usr/local/var/postgres` and stores the log file in that directory.
 
     ln -sfv /usr/local/opt/postgresql/*.plist ~/Library/LaunchAgents
 
