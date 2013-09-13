@@ -34,8 +34,8 @@ Push new configuration to the server and restart appropriate services to apply t
       bundle exec cap rubber:setup_remote_aliases
       bundle exec cap deploy
 
-If you're using Munin, you might want to reset the munin graphs:
-<http://serverfault.com/questions/189014/how-to-reset-munin-graphs>
+If you're using Munin, you might want to reset the munin graphs (if the server memory size
+has changed for example): <http://serverfault.com/questions/189014/how-to-reset-munin-graphs>
 
 ## AWS Instance types
 
