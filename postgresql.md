@@ -12,7 +12,7 @@ so that the Homebrew version of the client-side tools are used instead of the ol
 versions.
 
 Initialize the database with the current logged in user as the superuser account. In my
-case the logged in user is "Will". For a development database, a single superuser account
+case the logged in user is "will". For a development database, a single superuser account
 is all we need. Note the superuser account is the username parameter that should be used
 in database.yml
 
