@@ -18,6 +18,12 @@ in database.yml
 
     initdb /usr/local/var/postgres
 
+If you see an error like `"FATAL:  could not create shared memory segment: Cannot allocate memory"`
+edit `/usr/local/var/postgres/postgresql.conf and change these values.
+
+    max_connections = 20			  # (change requires restart)
+    shared_buffers = 1600kB			# min 128kB
+
 ## Starting / Stopping
 
 Start/stop PostgreSQL server using pg_ctl
