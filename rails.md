@@ -33,6 +33,10 @@ Open the contents of a gem in the text editor specified in your shell ($EDITOR o
 
     bundle open gem-name
 
+Check for outdated versions of gems. Particularly useful after a major gem update
+
+    bundle outdated
+
 # RubyGems
 
 See which specific gem is being used and where it's located.
@@ -74,7 +78,6 @@ Setup RSpec (must add `gem 'rspec-rails'` to Gemfile)
 
     rails g rspec:install
 
-
 # Use Guard to run tests automatically
 
 <http://railscasts.com/episodes/264-guard>
@@ -96,14 +99,12 @@ time Guard runs our test suite.
       .
       .
 
-## Use Spork to speed up tests
+## Use Spork to speed up tests (Outdated. I use Spring now)
 
 <http://railscasts.com/episodes/285>
 
 "Spork improves the loading time of your test suite by starting up your Rails application once
 in the background. Use it with Guard for the ultimate combo in fast feedback while doing TDD"
-
-
 
 # RSpec Commands
 
