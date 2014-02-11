@@ -275,7 +275,8 @@ Disable the Rubber-provided backup cron job defined in `config/rubber/role/db/cr
 
     #(disabled) 0 */3 * * * <%= Rubber.root %>/script/rubber cron --task util:backup_db ...
 
-NOTE: EBS snapshot backups are required for the last two recovery methods described below.
+NOTE: EBS snapshot backups are required for the last two recovery methods described in
+[maintenance.md](maintenance.md).
 
 ## Commit and push all config files to the repo
 
@@ -310,7 +311,7 @@ If your application has db seeds, SSH into server (see instructions below) and s
 On subsequent deploys, you only need to deploy and optionally migrate the database
 
     bundle exec cap deploy               # deploy the app (after the first deploy)
-    bundle exec cap deploy:migrate       # (if needed) to install db migrations
+    bundle exec cap deploy:migrate       # (if needed) to run db migrations
 
 You should be able to re-run rubber:bootstrap any time. If the bootstrapping process is interrupted, 
 rubber:bootstrap is smart enough to pick up where it left off. If, for some reason, rubber:bootstrap
@@ -345,3 +346,5 @@ the next deploy.
     rm script/munin/example_simple.rb
     rm config/rubber/role/passenger_nginx/munin-passenger-memory.conf
     rm config/rubber/role/passenger_nginx/munin-passenger.conf
+
+Note that any time you bootstrap the server, you will need to cleanup the munin charts again
