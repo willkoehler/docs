@@ -1,3 +1,66 @@
+These are maintenance procedures for apps deployed with [Using Rubber to deploy a Rails app on AWS](aws_deploy.md).  
+
+# Update Packages
+
+Run this on a regular basis
+
+    cap rubber:upgrade_packages
+
+If a reboot is needed, you will be asked after the packages are updated if you want to reboot
+
+# Update Gems
+
+To update the system gems used by Rubber (doesn't upgrade the application gems)
+
+    cap rubber:upgrade_gems
+
+In a typical configuration the gems that would be updated are open4, aws-s3, and bundler.
+Passenger and Rubber are locked at versions defined in the config.
+
+# Upgrade Ruby
+
+Edit `config/rubber/rubber-ruby.yml` and update `ruby_build_version` to the latest version (which
+can be found here <https://github.com/sstephenson/ruby-build/blob/master/CHANGELOG.md>) and update
+Ruby to whatever version you wish
+
+    ruby_build_version: 20140110
+    ruby_version: 2.0.0-p353
+
+Bootstrap the server. This will detect the version of ruby-build and Ruby have changed and install
+the new versions. Rubygems will also be updated by ruby-build. All systems gems (including Bundler)
+will be rebuilt and updated to the latest version (unless they are version-locked in the templates).
+
+    cap rubber:bootstrap
+
+Redeploy the app. This will rebuild the application gems if needed.
+
+    cap deploy
+
+# Upgrade Rubber
+
+Upgrading Rubber can be tricky, especially if there have been changes to the templates. There
+is no definitive procedure. However some basic steps will always be needed.
+
+Update the gem
+
+    bundle update rubber
+
+Re-vulcanize each of the roles and overwrite your current files as needed For example:
+
+    bundle exec rubber vulcanize minimal_passenger_nginx
+    bundle exec rubber vulcanize mysql
+    bundle exec rubber vulcanize munin
+    bundle exec rubber vulcanize monit
+
+Remove extra rubber and open4 lines that were added to the bottom of your gemfile.
+
+Using a diff tool, go through all the changed files and back out changes that you don't want.
+No easy way around this. It's a time-consuming process. Commit changes. Bootstrap servers and
+deploy the app
+
+    cap rubber:bootstrap
+    cap deploy
+
 # Recovering from failures
 
 ## Recovering if an instance crashes
