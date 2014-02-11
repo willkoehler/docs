@@ -350,8 +350,3 @@ the next deploy.
     rm script/munin/example_simple.rb
     rm config/rubber/role/passenger_nginx/munin-passenger-memory.conf
     rm config/rubber/role/passenger_nginx/munin-passenger.conf
-
-## Swap File
-
-The Ubuntu AMIs don't use swap files. To setup a swap file on the server, follow instructions here
-<http://serverfault.com/questions/218750/why-ec2-ubuntu-images-dont-have-swap>
