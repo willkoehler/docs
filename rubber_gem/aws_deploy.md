@@ -14,18 +14,13 @@ Add Rubber your Gemfile and update your gems with "`bundle install`"
 
     gem 'rubber', '2.7.1'
 
-If you are pre-compiling assets on the server (the default config), you also need to setup a JavaScript
-runtime on the server. The easiest way to do this is adding therubyracer gem to your Gemfile
+Use Node.js for the JavaScript runtime on the server. This is preferable to using therubyracer gem.
+Node.js comes pre-compiled as a package. therubyracer gem takes a LONG time to build. Edit
+`rubber-complete.yml` and add the following lines at the bottom to install the Node.js package
 
-    group :production do
-      gem 'therubyracer', :require => false   # javascript runtime for pre-compiling assets on the server
-    end
-
-To avoid installing therubyracer and other production gems on your development machine, run
-bundler using the `--without production` option. This is a remembered option, meaning it only
-needs to be used once and will be applied automatically after that.
-
-    bundle --without production
+    roles:
+      app:
+        packages: [nodejs]
 
 ## Vulcanize the app to setup the necessary files for Rubber.
 
