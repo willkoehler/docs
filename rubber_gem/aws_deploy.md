@@ -1,6 +1,6 @@
-# Using Rubber to deploy an app on AWS
+# Using Rubber to deploy a Rails app on AWS
 
-This documents contains instructions for using Rubber (v2.2.2 or v.2.5.0) to prepare an app with a
+This documents contains instructions for using Rubber (v2.7.1) to prepare an app with a
 basic framework for a single server deployment on AWS.
 
 ## Prepare the app
@@ -12,7 +12,7 @@ that you don't want checked into source control.
     
 Add Rubber your Gemfile and update your gems with "`bundle install`"
 
-    gem 'rubber', '2.5.0'
+    gem 'rubber', '2.7.1'
 
 If you are pre-compiling assets on the server (the default config), you also need to setup a JavaScript
 runtime on the server. The easiest way to do this is adding therubyracer gem to your Gemfile
@@ -156,10 +156,6 @@ on the server after it's been up a few days will tell you how many requests each
 
     max_app_connections: 5
 
-Add missing `nginx_log_dir` settings (bug introduced in 2.5.0 - pull request pending)
-
-    nginx_log_dir: /ebs/nginx/logs
-
 ### Edit config/rubber/common/database.yml.
 
 Add a socket line and comment out the host line. The socket connection is faster and will work on a
@@ -176,13 +172,6 @@ Remove this line
 Add this line:
 
     adapter: mysql2
-
-### Edit config/rubber/role/passenger_nginx/application.conf (pull request pending) 
-
-Remove conflicting `passenger_min_instances`. The setting `passenger_min_instances 1`
-conflicts with the setting in nginx.conf. Remove this line
-
-    passenger_min_instances 1;
 
 ### Edit config/rubber/role/passenger_nginx/nginx.conf
 
