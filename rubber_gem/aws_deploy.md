@@ -218,33 +218,6 @@ local github key to pull the deploy. Also use remote_cache to speed up deploys.
     ssh_options[:forward_agent] = true  # Magic! lets the server use our local github key to pull the deploy
     set :deploy_via, :remote_cache
     
-### (Optional) Add a task to precompile assets on the dev system
-
-This task compiles assets on the dev system and then pushes them up to the server. This is
-desirable in some situations. When deploying to a t1.micro instance, precompiling the assets on
-the server blows the CPU burst window and makes the server unresponsive for a long period of time.
-Precompiling assets locally also eliminates the need for installing a JavaScript runtime on the
-server (i.e. therubyracer)
-
-    namespace :deploy do
-      desc "precompile and deploy the assets to the server"
-      after "deploy:update_code", "deploy:precompile_assets"
-      task :precompile_assets, :roles => :app do
-        run_locally "#{rake} RAILS_ENV=#{rails_env} RAILS_GROUPS=assets assets:precompile"
-        run "mkdir -p #{release_path}/public/assets"
-        transfer(:up, "public/assets", "#{release_path}/public/assets") { print "." }
-        run_locally "rm -rf public/assets"    # clean up to avoid conflicts with development-mode assets
-      end
-    end
-
-The Rubber precompile assets task is no longer needed because we are precompiling assets locally.
-Delete these lines.
-
-    if Rubber::Util.has_asset_pipeline?
-      # load asset pipeline tasks, and reorder them to run after
-      ...
-    end
-
 ## Backups via EBS snapshots (optional)
 
 EBS snapshots provide an excellent backup mechanism for applications running on AWS.
