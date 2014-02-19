@@ -41,9 +41,10 @@ Redeploy the app. This will rebuild the application gems if needed.
 Upgrading Rubber can be tricky, especially if there have been changes to the templates. There
 is no definitive procedure. However some basic steps will always be needed.
 
-Update the gem
+Update the gem. Update Capistrano at the same time.
 
     bundle update rubber
+    bundle update capistrano
 
 Re-vulcanize each of the roles and overwrite your current files as needed For example:
 
