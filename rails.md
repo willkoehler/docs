@@ -60,6 +60,10 @@ Uninstall all gems on the system (to start fresh if desired)
 
     gem list --no-version | xargs gem uninstall -aIx
 
+Refresh all gems from their source and rebuilds all extensions and regenerates bin stubs
+
+    gem pristine --all
+
 ### Requiring 'rubygems' no longer necessary
 Ruby 1.9 includes RubyGems by default so you do not need a `require 'rubygems'` statement in
 order to load gem libraries. Just use `require 'gemname'` statements as needed.
