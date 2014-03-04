@@ -1,5 +1,7 @@
 # Install Ruby from scratch on Mac OS X
 
+This has been tested on OS X Mavericks with Ruby 2.0p451
+
 ## Update some libraries needed by Ruby.
 
 OS X has old versions of readline and openssl. libyaml is not installed in OS X
@@ -13,9 +15,10 @@ Install Homebrew first if needed. <http://mxcl.github.io/homebrew/>
 It's ok to ignore the warning in the configure step:
 `WARNING: unrecognized options: --with-openssl-dir, --with-readline-dir`
 
-    curl -O http://ftp.ruby-lang.org/pub/ruby/2.0/ruby-2.0.0-p247.tar.gz
-    tar -xvzf ruby-2.0.0-p247.tar.gz
-    cd ruby-2.0.0-p247/
+    cd /tmp
+    curl -O http://cache.ruby-lang.org/pub/ruby/2.0/ruby-2.0.0-p451.tar.gz
+    tar -xvzf ruby-2.0.0-p451.tar.gz
+    cd ruby-2.0.0-p451/
     ./configure --prefix=/usr/local/ruby --disable-install-doc --with-openssl-dir=`brew --prefix openssl` --with-readline-dir=`brew --prefix readline`
     make
     sudo make install
@@ -25,7 +28,7 @@ It's ok to ignore the warning in the configure step:
 Edit /etc/paths and add `/usr/local/ruby/bin` to the first line so the new version
 of ruby is the default. Exit and open the terminal window to apply changes.
 
-## Verify Ruby is working and version is 2.0.0p247
+## Verify Ruby is working and version is 2.0.0p451
 
     ruby -v
 
