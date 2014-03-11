@@ -1,0 +1,24 @@
+Heroku (webrick)
+ab -n20 -C _cms_session=[copy from browser] https://cms76.herokuapp.com/vendors
+Time per request:       967.906 [ms] (mean)
+Waiting:           284  653 315.5    656    1475
+
+DigitalOcean 1GB (3 workers)
+ab -n40 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/vendors
+Time per request:       642.871 [ms] (mean)
+Waiting:           204  425 235.8    299    1306
+
+DigitalOcean 2GB (3 workers)
+ab -n40 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/vendors
+Time per request:       982.619 [ms] (mean)
+Waiting:           402  770 271.9    711    2141
+
+DigitalOcean 1GB (3 workers)
+ab -n40 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/vendors
+Time per request:       962.175 [ms] (mean)
+Waiting:           462  743 157.7    707    1320
+
+AWS t1.micro (3 workers)
+ab -n40 -C _cms_session=[copy from browser] https://demo.cmscontracts.com/vendors
+Time per request:       514.571 [ms] (mean)
+Waiting:           190  308 146.9    281     887
