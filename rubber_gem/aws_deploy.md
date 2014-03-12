@@ -10,17 +10,11 @@ that you don't want checked into source control.
 
     mkdir -p config/secrets
     
-Add Rubber your Gemfile and update your gems with "`bundle install`"
+Add Rubber your Gemfile and update your gems with "`bundle install`". You also probably need the unf
+gem to avoid a warning error from fog: "Unable to load the 'unf' gem. Your AWS strings may not be properly encoded."
 
     gem 'rubber', '2.7.1'
-
-Use Node.js for the JavaScript runtime on the server. This is preferable to using therubyracer gem.
-Node.js comes pre-compiled as a package. therubyracer gem takes a LONG time to build. Edit
-`rubber-complete.yml` and add the following lines at the bottom to install the Node.js package
-
-    roles:
-      app:
-        packages: [nodejs]
+    gem 'unf'
 
 ## Vulcanize the app to setup the necessary files for Rubber.
 
@@ -70,8 +64,8 @@ the config/secrets folder in your app. You then need to create a public key from
 
 ## Edit rubber.yml to customize your server configuration
 
-Enter all REQUIRED parameters (except AWS access credentials which you defined above) Below are more
-details on some of the required parameters.
+Enter all required parameters (except AWS access credentials which you defined above) Below are more
+details on some of the required parameters. Required parameters are marked with "REQUIRED:"
 
 ### Chose your instance type
 
@@ -91,13 +85,15 @@ lines and add your own username and password.
     web_tools_user: admin
     web_tools_password: yourpw
 
-### Disable auto security groups
+### Disable auto security groups and isolate security groups
 
 By default, Rubber creates security group for all possible server roles in case they are needed in the future.
 (AWS doesn't allow you to assign new security groups after you create an instance.) This is not needed in our
-case so set `auto_security_groups` to false
+case so set `auto_security_groups` to false. Also set `isolate_security_groups` to false because the security
+groups that are being setup are generic and can be shared.
 
     auto_security_groups: false
+    isolate_security_groups: false
 
 ### Tell Rubber to use rubber-secret.yml
 
@@ -136,6 +132,24 @@ and EBS volume for those (as described above). One simple solution is to mount a
 move all assets to `/ebs` by doing a global search and replace in your app, replacing `"/mnt/"` with `"/ebs/"`
 
 ## Make a few config changes
+
+### Edit rubber-complete.yml
+
+Use Node.js for the JavaScript runtime on the server. This is preferable to using therubyracer gem.
+Node.js comes pre-compiled as a package. therubyracer gem takes a LONG time to build. Add the following
+lines at the bottom of rubber-complete.yml to install the Node.js package
+
+    roles:
+      app:
+        packages: [nodejs]
+
+### Edit rubber-ruby.yml
+
+Update `ruby_build_version` to the latest version (which can be found here
+<https://github.com/sstephenson/ruby-build/blob/master/CHANGELOG.md>) and update Ruby to whatever version you wish
+
+    ruby_build_version: 20140225
+    ruby_version: 2.0.0-p451
 
 ### Edit rubber-passenger_nginx.yml
 
