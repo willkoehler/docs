@@ -1,188 +1,220 @@
-AWS m1.small (2 workers)
-ab -n200 -c1 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       927.632 [ms] (mean)
-Waiting:           280  697 256.1    696    1943
-ab -n200 -c5 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       2289.775 [ms] (mean)
-Time per request:       457.955 [ms] (mean, across all concurrent requests)
-Waiting:            965 1988 398.3   2004    2950
-ab -n200 -c10 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       5778.263 [ms] (mean)
-Time per request:       577.826 [ms] (mean, across all concurrent requests)
-Waiting:           1368 5376 1892.8   4478   10129
-ab -n200 -c20 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       9120.852 [ms] (mean)
-Time per request:       456.043 [ms] (mean, across all concurrent requests)
-Waiting:            429 8401 1486.1   8637   10095
-
-AWS m1.small (5 workers)
-ab -n200 -c1 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       928.874 [ms] (mean)
-Time per request:       928.874 [ms] (mean, across all concurrent requests)
-Waiting:           313  704 312.6    689    3178
-ab -n200 -c5 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       2580.627 [ms] (mean)
-Time per request:       516.125 [ms] (mean, across all concurrent requests)
-Waiting:            831 2283 1255.3   2183   11224
-ab -n200 -c10 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       4749.159 [ms] (mean)
-Time per request:       474.916 [ms] (mean, across all concurrent requests)
-Waiting:           1726 4350 821.0   4331    6403
-ab -n200 -c20 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       11134.683 [ms] (mean)
-Time per request:       556.734 [ms] (mean, across all concurrent requests)
-Waiting:           2095 10093 3058.3   9487   18777
-
-When making concurrent requests, CPU usage is spread evenly among all the worker processes. Typical:
-
-top - 17:32:38 up  1:52,  1 user,  load average: 5.12, 3.43, 2.31
-Tasks:  78 total,   1 running,  77 sleeping,   0 stopped,   0 zombie
-Cpu(s): 50.5%us,  4.7%sy,  0.0%ni,  0.0%id,  0.0%wa,  0.0%hi,  0.0%si, 44.8%st
-Mem:   1692552k total,  1642088k used,    50464k free,    86576k buffers
-Swap:   917500k total,        8k used,   917492k free,  1001512k cached
-
-  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND                                                                                                                          
-31652 cms       20   0  335m  98m 3576 S 19.0  6.0   0:40.50 ruby                                                                                                                              
-31673 cms       20   0  336m  98m 3544 S 19.0  6.0   0:40.88 ruby                                                                                                                              
-31645 cms       20   0  335m 100m 3568 S 18.6  6.1   2:05.59 ruby                                                                                                                              
-31659 cms       20   0  336m  99m 3564 S 18.0  6.0   0:39.95 ruby                                                                                                                              
-31666 cms       20   0  336m  99m 3548 S 18.0  6.0   0:39.78 ruby                    
-
-AWS m1.small (5 workers)
-ab -n200 -c1 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       815.126 [ms] (mean)
-Time per request:       815.126 [ms] (mean, across all concurrent requests)
-Waiting:           292  605 215.8    678    2086
-ab -n200 -c5 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       2589.312 [ms] (mean)
-Time per request:       517.862 [ms] (mean, across all concurrent requests)
-Waiting:            952 2290 1288.9   2083   11458
-ab -n200 -c10 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       5071.357 [ms] (mean)
-Time per request:       507.136 [ms] (mean, across all concurrent requests)
-Waiting:           1759 4720 1147.0   4701    7954
-ab -n200 -c20 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       9695.341 [ms] (mean)
-Time per request:       484.767 [ms] (mean, across all concurrent requests)
-Waiting:           3843 9151 1586.5   9385   12466
-
-When making concurrent requests, CPU usage is spread evenly among all the worker processes. Typical:
-
-top - 17:52:47 up  2:12,  1 user,  load average: 8.60, 5.74, 3.67
-Tasks:  83 total,   1 running,  82 sleeping,   0 stopped,   0 zombie
-Cpu(s): 44.3%us,  3.3%sy,  0.0%ni,  0.0%id,  0.0%wa,  0.0%hi,  0.0%si, 52.5%st
-Mem:   1692552k total,  1636776k used,    55776k free,    88796k buffers
-Swap:   917500k total,        8k used,   917492k free,   797116k cached
-
-  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND                                                                                                                          
- 8087 cms       20   0  335m  98m 3560 S 10.6  6.0   0:14.98 ruby                                                                                                                              
- 8146 cms       20   0  336m  99m 3548 S 10.6  6.0   0:34.55 ruby                                                                                                                              
- 8108 cms       20   0  336m  98m 3556 S 10.2  6.0   0:34.35 ruby                                                                                                                              
- 8080 cms       20   0  335m 100m 3548 S  9.9  6.1   1:52.75 ruby                                                                                                                              
- 8115 cms       20   0  336m  99m 3564 S  9.9  6.0   0:15.33 ruby                                                                                                                              
- 8122 cms       20   0  336m  99m 3544 S  9.6  6.0   0:34.36 ruby                                                                                                                              
- 8101 cms       20   0  336m  99m 3540 S  8.9  6.0   0:15.03 ruby                                                                                                                              
- 8131 cms       20   0  336m  99m 3564 S  8.9  6.0   0:15.41 ruby                                                                                                                              
- 8138 cms       20   0  336m  99m 3540 S  8.9  6.0   0:33.60 ruby                                                                                                                              
- 8094 cms       20   0  336m  98m 3564 S  8.3  6.0   0:14.96 ruby
- 
- 
- 
- 
 AWS c3.large (2 workers)
-ab -n200 -c1 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       375.150 [ms] (mean)
-Waiting:           111  148  24.3    152     254
-ab -n200 -c2 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       415.467 [ms] (mean)
-Time per request:       207.733 [ms] (mean, across all concurrent requests)
-Waiting:           116  187  25.4    195     248
-ab -n200 -c5 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       499.223 [ms] (mean)
-Time per request:       99.845 [ms] (mean, across all concurrent requests)
-Waiting:           142  248  82.5    233     931
-ab -n200 -c10 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       955.134 [ms] (mean)
-Time per request:       95.513 [ms] (mean, across all concurrent requests)
-Waiting:           237  674  72.7    679    1007
-ab -n200 -c20 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       1911.128 [ms] (mean)
-Time per request:       95.556 [ms] (mean, across all concurrent requests)
-Waiting:            250 1545 242.9   1606    1790
-
-Ruby workers only hit ~40% with 2 concurrent requests. With 5 concurrent requests, Ruby workers hit 90% CPU
-With 10 concurrent requests, Ruby workers hit ~94%
-
-top - 21:45:45 up 24 min,  1 user,  load average: 0.95, 0.55, 0.33
-Tasks:  80 total,   1 running,  79 sleeping,   0 stopped,   0 zombie
-Cpu(s): 93.0%us,  4.7%sy,  0.2%ni,  1.8%id,  0.2%wa,  0.0%hi,  0.2%si,  0.0%st
-Mem:   3840308k total,   590792k used,  3249516k free,    30352k buffers
-Swap:        0k total,        0k used,        0k free,   219656k cached
-
-  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND                                                                                                                          
-11145 cms       20   0  336m  99m 3572 S   94  2.6   0:52.88 ruby                                                                                                                              
-11178 cms       20   0  336m  99m 3572 S   93  2.6   0:17.64 ruby                                       
+ab -n200 -c1 -C _cms_session=xxxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       532.755 [ms] (mean)
+Time per request:       532.755 [ms] (mean, across all concurrent requests)
+Waiting:      123  145  19.8    134     191
+ab -n200 -c2 -C _cms_session=xxxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       565.754 [ms] (mean)
+Time per request:       282.877 [ms] (mean, across all concurrent requests)
+Waiting:      123  173  42.9    165     595
+ab -n200 -c5 -C _cms_session=xxxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       622.048 [ms] (mean)
+Time per request:       124.410 [ms] (mean, across all concurrent requests)
+Waiting:      128  192  43.4    181     344
+ab -n200 -c10 -C _cms_session=xxxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       741.511 [ms] (mean)
+Time per request:       74.151 [ms] (mean, across all concurrent requests)
+Waiting:      166  275  71.2    268     694
+ab -n200 -c20 -C _cms_session=xxxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       1460.618 [ms] (mean)
+Time per request:       73.031 [ms] (mean, across all concurrent requests)
+Waiting:      187  924 148.5    951    1220
 
 AWS c3.large (5 workers)
-ab -n200 -c1 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       375.550 [ms] (mean)
-Waiting:           111  149  65.6    152    1042
-ab -n200 -c2 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       420.448 [ms] (mean)
-Time per request:       210.224 [ms] (mean, across all concurrent requests)
-Waiting:           115  186  45.8    190     701
-ab -n200 -c5 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       552.940 [ms] (mean)
-Time per request:       110.588 [ms] (mean, across all concurrent requests)
-Waiting:           129  297  97.7    288     612
-ab -n200 -c10 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       948.820 [ms] (mean)
-Time per request:       94.882 [ms] (mean, across all concurrent requests)
-Waiting:           366  668 125.7    664    1144
-ab -n200 -c20 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       1906.063 [ms] (mean)
-Time per request:       95.303 [ms] (mean, across all concurrent requests)
-Waiting:            364 1543 247.2   1573    2100
+ab -n200 -c1 -C _cms_session=xxxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       534.109 [ms] (mean)
+Waiting:      123  145  20.4    133     190
+ab -n200 -c2 -C _cms_session=xxxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       567.500 [ms] (mean)
+Time per request:       283.750 [ms] (mean, across all concurrent requests)
+Waiting:      124  165  41.9    161     592
+ab -n200 -c5 -C _cms_session=xxxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       638.942 [ms] (mean)
+Time per request:       127.788 [ms] (mean, across all concurrent requests)
+Waiting:      125  218  72.9    207     493
+ab -n200 -c10 -C _cms_session=xxxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       795.993 [ms] (mean)
+Time per request:       79.599 [ms] (mean, across all concurrent requests)
+Waiting:      134  353 132.8    337     814
+ab -n200 -c20 -C _cms_session=xxxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       1568.191 [ms] (mean)
+Time per request:       78.410 [ms] (mean, across all concurrent requests)
+Waiting:      288 1026 182.4   1028    1613
 
-With 5 concurrent requests, Ruby workers hit 30-40% CPU. Widht 10 concurrent requests, Ruby works hit 40+% CPU.
+AWS c3.large (10 workers)
+ab -n200 -c1 -C _cms_session=xxxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       550.744 [ms] (mean)
+Waiting:      125  152  39.9    135     604
+ab -n200 -c2 -C _cms_session=xxxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       573.973 [ms] (mean)
+Time per request:       286.986 [ms] (mean, across all concurrent requests)
+Waiting:      126  168  46.5    168     667
+ab -n200 -c5 -C _cms_session=xxxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       650.661 [ms] (mean)
+Time per request:       130.132 [ms] (mean, across all concurrent requests)
+Waiting:      129  213  66.2    200     431
+ab -n200 -c10 -C _cms_session=xxxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       882.959 [ms] (mean)
+Time per request:       88.296 [ms] (mean, across all concurrent requests)
+Waiting:      140  423 164.2    427     881
+ab -n200 -c20 -C _cms_session=xxxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       1632.949 [ms] (mean)
+Time per request:       81.647 [ms] (mean, across all concurrent requests)
+Waiting:      678 1123 217.5   1162    1800
 
-AWS c3.large (5 workers)
-ab -n200 -c1 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       398.570 [ms] (mean)
-Waiting:           110  154  45.1    151     506
-ab -n200 -c2 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       426.393 [ms] (mean)
-Time per request:       213.197 [ms] (mean, across all concurrent requests)
-Waiting:           112  181  49.3    178     724
-ab -n200 -c5 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       614.022 [ms] (mean)
-Time per request:       122.804 [ms] (mean, across all concurrent requests)
-Waiting:           120  318 196.4    291    1851
-ab -n200 -c10 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       1083.008 [ms] (mean)
-Time per request:       108.301 [ms] (mean, across all concurrent requests)
-Waiting:           178  737 279.8    737    1508
-ab -n200 -c20 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       1981.761 [ms] (mean)
-Time per request:       99.088 [ms] (mean, across all concurrent requests)
-Waiting:            639 1604 238.0   1641    2292
 
-With 10 & 20 concurrent requests, Ruby workers maxed out the CPU. There was some spare CPU with 5 concurrent requests
 
-top - 22:08:03 up 46 min,  1 user,  load average: 3.24, 1.62, 0.95
-Tasks:  88 total,   1 running,  87 sleeping,   0 stopped,   0 zombie
-Cpu(s): 95.2%us,  4.8%sy,  0.0%ni,  0.0%id,  0.0%wa,  0.0%hi,  0.0%si,  0.0%st
-Mem:   3840308k total,  1009892k used,  2830416k free,    36508k buffers
-Swap:        0k total,        0k used,        0k free,   289384k cached
+AWS m1.small (2 workers)
+ab -n200 -c1 -C _cms_session=xxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       965.172 [ms] (mean)
+Waiting:      222  529 224.2    521    1293
+ab -n200 -c2 -C _cms_session=xxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       1151.098 [ms] (mean)
+Time per request:       575.549 [ms] (mean, across all concurrent requests)
+Waiting:      227  654 280.5    660    1284
+ab -n200 -c5 -C _cms_session=xxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       1927.254 [ms] (mean)
+Time per request:       385.451 [ms] (mean, across all concurrent requests)
+Waiting:      357 1159 350.1   1168    2113
+ab -n200 -c10 -C _cms_session=xxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       3928.473 [ms] (mean)
+Time per request:       392.847 [ms] (mean, across all concurrent requests)
+Waiting:      735 3084 494.9   3108    4387
+ab -n200 -c20 -C _cms_session=xxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       7846.103 [ms] (mean)
+Time per request:       392.305 [ms] (mean, across all concurrent requests)
+Waiting:      855 6767 1215.5   7032    8425
 
-  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND                                                                                                                          
-24567 cms       20   0  335m 100m 3568 S   20  2.7   0:54.00 ruby                                                                                                                              
-24574 cms       20   0  335m  98m 3544 S   20  2.6   0:10.03 ruby                                                                                                                              
-24618 cms       20   0  336m  99m 3556 S   20  2.6   0:10.33 ruby                                                                                                                              
-24581 cms       20   0  336m  98m 3548 S   19  2.6   0:09.54 ruby                                                                                                                              
-24632 cms       20   0  336m  99m 3560 S   19  2.6   0:31.29 ruby                                                                                                                              
-24602 cms       20   0  336m  99m 3524 S   19  2.6   0:09.72 ruby                                                                                                                              
-24609 cms       20   0  336m  98m 3544 S   19  2.6   0:16.66 ruby                                                                                                                              
-24588 cms       20   0  336m  99m 3524 S   18  2.6   0:09.91 ruby                                                                                                                              
-24625 cms       20   0  336m  99m 3544 S   18  2.6   0:16.76 ruby                                                                                                                              
-24595 cms       20   0  336m  98m 3524 S   18  2.6   0:16.46 ruby                            
+
+AWS m1.small (5 workers)
+ab -n200 -c1 -C _cms_session=xxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       952.216 [ms] (mean)
+Waiting:      161  511 219.0    502    1260
+ab -n200 -c2 -C _cms_session=xxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       1184.844 [ms] (mean)
+Time per request:       592.422 [ms] (mean, across all concurrent requests)
+Waiting:      220  687 271.5    709    1262
+ab -n200 -c5 -C _cms_session=xxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       2068.650 [ms] (mean)
+Time per request:       413.730 [ms] (mean, across all concurrent requests)
+Waiting:      268 1432 542.8   1436    3128
+ab -n200 -c10 -C _cms_session=xxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       4050.005 [ms] (mean)
+Time per request:       405.000 [ms] (mean, across all concurrent requests)
+Waiting:      952 3207 940.1   3143    5250
+ab -n200 -c20 -C _cms_session=xxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       8119.746 [ms] (mean)
+Time per request:       405.987 [ms] (mean, across all concurrent requests)
+Waiting:     1444 7045 1374.8   7202   11240
+
+AWS m1.small (10 workers)
+ab -n200 -c1 -C _cms_session=xxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       1009.747 [ms] (mean)
+Waiting:      166  563 223.0    558    1116
+ab -n200 -c2 -C _cms_session=xxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       1214.186 [ms] (mean)
+Time per request:       607.093 [ms] (mean, across all concurrent requests)
+Waiting:      230  709 322.5    721    3031
+ab -n200 -c5 -C _cms_session=xxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       2154.117 [ms] (mean)
+Time per request:       430.823 [ms] (mean, across all concurrent requests)
+Waiting:      274 1423 552.9   1403    3093
+ab -n200 -c10 -C _cms_session=xxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       4352.629 [ms] (mean)
+Time per request:       435.263 [ms] (mean, across all concurrent requests)
+Waiting:      863 3470 1293.8   3481    6974
+ab -n200 -c20 -C _cms_session=xxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       8572.241 [ms] (mean)
+Time per request:       428.612 [ms] (mean, across all concurrent requests)
+Waiting:     2181 7569 2113.7   7354   13715
+
+
+Heroku (webrick - 1 dyno)
+ab -n200 -c1 -C _cms_session=xxx https://cms76.herokuapp.com/contracts?pp=disable
+Time per request:       550.063 [ms] (mean)
+Waiting:      145  358 185.9    271     997
+ab -n200 -c2 -C _cms_session=xxx https://cms76.herokuapp.com/contracts?pp=disable
+Time per request:       588.822 [ms] (mean)
+Time per request:       294.411 [ms] (mean, across all concurrent requests)
+Waiting:      156  398 261.0    322    1909
+ab -n200 -c5 -C _cms_session=xxx https://cms76.herokuapp.com/contracts?pp=disable
+Time per request:       911.907 [ms] (mean)
+Time per request:       182.381 [ms] (mean, across all concurrent requests)
+Waiting:      291  726 211.8    708    2360
+Time per request:       949.555 [ms] (mean)
+Time per request:       189.911 [ms] (mean, across all concurrent requests)
+Waiting:      225  764 191.0    714    1558
+ab -n200 -c10 -C _cms_session=xxx https://cms76.herokuapp.com/contracts?pp=disable
+Time per request:       2050.152 [ms] (mean)
+Time per request:       205.015 [ms] (mean, across all concurrent requests)
+Waiting:      277 1816 412.6   1778    3559
+Time per request:       1837.363 [ms] (mean)
+Time per request:       183.736 [ms] (mean, across all concurrent requests)
+Waiting:      271 1620 297.0   1643    2265
+ab -n200 -c20 -C _cms_session=xxx https://cms76.herokuapp.com/contracts?pp=disable
+Time per request:       3699.568 [ms] (mean)
+Time per request:       184.978 [ms] (mean, across all concurrent requests)
+Waiting:      757 3343 856.5   3172    5598
+Time per request:       3719.471 [ms] (mean)
+Time per request:       185.974 [ms] (mean, across all concurrent requests)
+Waiting:      204 3330 731.9   3421    4356
+
+Heroku (webrick - 2 dynos)
+ab -n200 -c1 -C _cms_session=xxx https://cms76.herokuapp.com/contracts?pp=disable
+Time per request:       591.245 [ms] (mean)
+Waiting:      144  395 264.2    278    2298
+Time per request:       551.014 [ms] (mean)
+Waiting:      154  358 208.5    268    1617
+ab -n200 -c2 -C _cms_session=xxx https://cms76.herokuapp.com/contracts?pp=disable
+Time per request:       473.512 [ms] (mean)
+Time per request:       236.756 [ms] (mean, across all concurrent requests)
+Waiting:      151  292 127.5    264    1016
+Time per request:       486.720 [ms] (mean)
+Time per request:       243.360 [ms] (mean, across all concurrent requests)
+Waiting:      156  304 114.5    290     713
+ab -n200 -c5 -C _cms_session=xxx https://cms76.herokuapp.com/contracts?pp=disable
+Time per request:       825.666 [ms] (mean)
+Time per request:       165.133 [ms] (mean, across all concurrent requests)
+Waiting:      178  397 200.2    354    1645
+ab -n200 -c10 -C _cms_session=xxx https://cms76.herokuapp.com/contracts?pp=disable
+Time per request:       1272.387 [ms] (mean)
+Time per request:       127.239 [ms] (mean, across all concurrent requests)
+Waiting:      152  865 567.5    720    2961
+ab -n200 -c20 -C _cms_session=xxx https://cms76.herokuapp.com/contracts?pp=disable
+Time per request:       2970.760 [ms] (mean)
+Time per request:       148.538 [ms] (mean, across all concurrent requests)
+Waiting:      153 2489 2091.6   1754    7042
+
+Heroku (webrick - 4 dynos)
+ab -n200 -c1 -C _cms_session=xxx https://cms76.herokuapp.com/contracts?pp=disable
+Time per request:       634.993 [ms] (mean)
+Waiting:      146  434 335.8    289    1964
+Time per request:       721.243 [ms] (mean)
+Waiting:      154  512 391.2    393    3053
+Time per request:       658.037 [ms] (mean)
+Waiting:      148  458 346.9    300    2516
+ab -n200 -c2 -C _cms_session=xxx https://cms76.herokuapp.com/contracts?pp=disable
+Time per request:       641.916 [ms] (mean)
+Time per request:       320.958 [ms] (mean, across all concurrent requests)
+Waiting:      154  442 288.6    383    1871
+Time per request:       722.117 [ms] (mean)
+Time per request:       361.059 [ms] (mean, across all concurrent requests)
+Waiting:      164  513 404.2    399    3578
+Time per request:       512.281 [ms] (mean)
+Time per request:       256.141 [ms] (mean, across all concurrent requests)
+Waiting:      151  334 171.4    282    1308
+ab -n200 -c5 -C _cms_session=xxx https://cms76.herokuapp.com/contracts?pp=disable
+Time per request:       857.153 [ms] (mean)
+Time per request:       171.431 [ms] (mean, across all concurrent requests)
+Waiting:      152  642 682.5    335    3652
+ab -n200 -c10 -C _cms_session=xxx https://cms76.herokuapp.com/contracts?pp=disable
+Time per request:       1305.775 [ms] (mean)
+Time per request:       130.578 [ms] (mean, across all concurrent requests)
+Waiting:      158 1038 1239.4    473    5258
+ab -n200 -c20 -C _cms_session=xxx https://cms76.herokuapp.com/contracts?pp=disable
+Time per request:       1946.593 [ms] (mean)
+Time per request:       97.330 [ms] (mean, across all concurrent requests)
+Waiting:      148 1471 1526.0    798    5413
+Time per request:       2098.711 [ms] (mean)
+Time per request:       104.936 [ms] (mean, across all concurrent requests)
+Waiting:        0 1730 2271.8    602    8173

@@ -1,148 +1,68 @@
-Heroku (webrick)
-ab -n20 -c1 -C _cms_session=[copy from browser] https://cms76.herokuapp.com/contracts
-Time per request:       634.492 [ms] (mean)
-Waiting:           171  245  99.8    238     628
-
-Heroku (webrick)
-ab -n100 -c1 -C _cms_session=[copy from browser] https://cms76.herokuapp.com/contracts
-Time per request:       430.183 [ms] (mean)
-Waiting:           155  216  71.7    197     627
-ab -n100 -c5 -C _cms_session=[copy from browser] https://cms76.herokuapp.com/contracts
-Time per request:       856.496 [ms] (mean)
-Time per request:       171.299 [ms] (mean, across all concurrent requests)
-Waiting:           187  611 117.7    587    1126
-ab -n100 -c10 -C _cms_session=[copy from browser] https://cms76.herokuapp.com/contracts
-Time per request:       1735.697 [ms] (mean)
-Time per request:       173.570 [ms] (mean, across all concurrent requests)
-Waiting:            295 1323 285.2   1247    2049
-
-Heroku (webrick)
-ab -n200 -c1 -C _cms_session=[copy from browser] https://cms76.herokuapp.com/contracts
-Time per request:       814.477 [ms] (mean)
-Waiting:           178  393 252.3    286    1896
-ab -n200 -c2 -C _cms_session=[copy from browser] https://cms76.herokuapp.com/contracts
-Time per request:       727.373 [ms] (mean)
-Time per request:       363.687 [ms] (mean, across all concurrent requests)
-Waiting:           182  363 175.0    307    1079
-ab -n200 -c5 -C _cms_session=[copy from browser] https://cms76.herokuapp.com/contracts
-Time per request:       1707.201 [ms] (mean)
-Time per request:       341.440 [ms] (mean, across all concurrent requests)
-Waiting:            234 1254 936.9    984    6012
-ab -n200 -c10 -C _cms_session=[copy from browser] https://cms76.herokuapp.com/contracts
-Time per request:       3792.359 [ms] (mean)
-Time per request:       379.236 [ms] (mean, across all concurrent requests)
-Waiting:           1065 3454 1553.7   3343    6898
-ab -n200 -c10 -C _cms_session=[copy from browser] https://cms76.herokuapp.com/contracts
-Time per request:       2056.406 [ms] (mean)
-Time per request:       205.641 [ms] (mean, across all concurrent requests)
-Waiting:            262 1776 370.8   1696    3038
-
-DigitalOcean 1GB (3 workers)
-ab -n40 -c1 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       469.955 [ms] (mean)
-Waiting:           128  177  35.5    174     243
-
-
-DigitalOcean 2GB (3 workers)
-ab -n40 -c1 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       510.610 [ms] (mean)
-Waiting:           176  247  42.6    252     422
-
-
-DigitalOcean 1GB (3 workers)
-ab -n40 -c1 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       546.049 [ms] (mean)
-Waiting:           170  258  81.8    254     616
-
-
-DigitalOcean 1GB (3 workers)
-ab -n100 -c1 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       658.699 [ms] (mean)
-Waiting:           178  350 149.4    286     732
-ab -n100 -c5 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       1349.737 [ms] (mean)
-Time per request:       269.947 [ms] (mean, across all concurrent requests)
-Waiting:            523 1045 242.7   1024    1666
-ab -n100 -c10 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       2704.575 [ms] (mean)
-Time per request:       270.457 [ms] (mean, across all concurrent requests)
-Waiting:            710 2311 505.5   2295    3249
-
-
-DigitalOcean 2GB (3 workers)
-ab -n100 -c1 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       1003.787 [ms] (mean)
-Waiting:           303  717 192.5    656    1277
-ab -n100 -c5 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       1496.023 [ms] (mean)
-Time per request:       299.205 [ms] (mean, across all concurrent requests)
-Waiting:            390 1131 391.0   1088    2495
-ab -n100 -c10 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       2842.759 [ms] (mean)
-Time per request:       284.276 [ms] (mean, across all concurrent requests)
-Waiting:            981 2396 555.6   2387    3891
----- (increase to 10 workers) -----
-ab -n100 -c1 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       1054.501 [ms] (mean)
-Waiting:           329  762 212.8    667    1717
-ab -n100 -c5 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       1911.707 [ms] (mean)
-Time per request:       382.341 [ms] (mean, across all concurrent requests)
-Waiting:            562 1478 781.4   1385    6059
-ab -n100 -c10 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       3060.825 [ms] (mean)
-Time per request:       306.083 [ms] (mean, across all concurrent requests)
-Waiting:           1440 2613 871.9   2496    9359
- --- (later in the afternoon - at Salt Mines) ---
-ab -n100 -c1 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       804.566 [ms] (mean)
-Waiting:           186  514 132.3    534     947
-ab -n100 -c5 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       731.220 [ms] (mean)
-Time per request:       146.244 [ms] (mean, across all concurrent requests)
-Waiting:           179  427 134.8    418     729
-ab -n100 -c10 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       1319.904 [ms] (mean)
-Time per request:       131.990 [ms] (mean, across all concurrent requests)
-Waiting:           184  828 319.0    811    1397
- --- (little later) ---
-ab -n100 -c1 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       826.443 [ms] (mean)
-Waiting:           176  539 171.8    614    1188
-ab -n100 -c5 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       777.065 [ms] (mean)
-Time per request:       155.413 [ms] (mean, across all concurrent requests)
-Waiting:           179  466 244.3    373    1044
-ab -n100 -c10 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts
-Time per request:       1513.650 [ms] (mean)
-Time per request:       151.365 [ms] (mean, across all concurrent requests)
-Waiting:            224 1166 520.3   1086    2904
-
-
 AWS t1.micro (3 workers)
-ab -n40 -c1 -C _cms_session=[copy from browser] https://demo.cmscontracts.com/contracts
-Time per request:       435.215 [ms] (mean)
-Waiting:           123  175  49.6    162     269
-ab -n100 -c1 -C _cms_session=[copy from browser] https://demo.cmscontracts.com/contracts
-Time per request:       396.055 [ms] (mean)
-Waiting:           123  166  42.0    140     241
-ab -n100 -c5 -C _cms_session=[copy from browser] https://demo.cmscontracts.com/contracts
-Time per request:       887.564 [ms] (mean)
-Time per request:       177.513 [ms] (mean, across all concurrent requests)
-Waiting:           318  602 208.0    571    1175
-ab -n100 -c10 -C _cms_session=[copy from browser] https://demo.cmscontracts.com/contracts
-Time per request:       1620.069 [ms] (mean)
-Time per request:       162.007 [ms] (mean, across all concurrent requests)
-Waiting:            337 1282 253.4   1300    1881
---- (later - at Salt Mines) ---
-ab -n100 -c1 -C _cms_session=[copy from browser] https://demo.cmscontracts.com/contracts
-Time per request:       388.250 [ms] (mean)
-Waiting:           115  173  65.6    133     467
-ab -n100 -c5 -C _cms_session=[copy from browser] https://demo.cmscontracts.com/contracts
-Time per request:       834.494 [ms] (mean)
-Time per request:       166.899 [ms] (mean, across all concurrent requests)
-Waiting:           237  591 184.1    624    1040
-ab -n100 -c10 -C _cms_session=[copy from browser] https://demo.cmscontracts.com/contracts
-Time per request:       1845.404 [ms] (mean)
-Time per request:       184.540 [ms] (mean, across all concurrent requests)
-Waiting:            287 1515 583.1   1466    6115
+ab -n50 -c1 -C _cms_session=xxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       409.971 [ms] (mean)
+Waiting:      120  179  75.0    142     568
+ab -n50 -c5 -C _cms_session=xxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       814.704 [ms] (mean)
+Time per request:       162.941 [ms] (mean, across all concurrent requests)
+Waiting:      297  540 170.4    573     924
+
+AWS c3.large (5 workers)
+ab -n200 -c1 -C _cms_session=xxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       546.063 [ms] (mean)
+Waiting:      122  147  21.8    134     213
+ab -n200 -c5 -C _cms_session=xxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       629.500 [ms] (mean)
+Time per request:       125.900 [ms] (mean, across all concurrent requests)
+Waiting:      122  199  55.9    189     456
+
+AWS m1.small (2 workers) - 2 workers is measurably faster than 5 workers for m1.small
+ab -n200 -c1 -C _cms_session=xxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       969.737 [ms] (mean)
+Waiting:      233  534 219.4    522    1004
+ab -n200 -c5 -C _cms_session=xxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       1942.889 [ms] (mean)
+Time per request:       388.578 [ms] (mean, across all concurrent requests)
+Waiting:      432 1195 342.4   1212    2246
+
+Heroku (2 dynos)
+ab -n200 -c1 -C _cms_session=xxx https://cms76.herokuapp.com/contracts?pp=disable
+Time per request:       536.374 [ms] (mean)
+Waiting:      153  349 235.0    274    2536
+ab -n200 -c5 -C _cms_session=xxx https://cms76.herokuapp.com/contracts?pp=disable
+Time per request:       644.053 [ms] (mean)
+Time per request:       128.811 [ms] (mean, across all concurrent requests)
+Waiting:      162  435 203.5    383    1069
+
+Digital Ocean 1GB (2 workers)
+ab -n200 -c1 -C _cms_session=xxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       409.778 [ms] (mean)
+Waiting:      111  159  38.4    150     269
+ab -n200 -c5 -C _cms_session=xxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       582.151 [ms] (mean)
+Time per request:       116.430 [ms] (mean, across all concurrent requests)
+Waiting:      204  320  92.6    325     880
+
+Digital Ocean 2GB (5 workers)
+ab -n200 -c1 -C _cms_session=xxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       920.575 [ms] (mean)
+Waiting:      117  256 115.3    229     659
+Time per request:       747.858 [ms] (mean)
+Waiting:      116  257 312.4    198    3320
+Time per request:       451.168 [ms] (mean)
+Waiting:      118  197  60.5    173     503
+Time per request:       428.184 [ms] (mean)
+Waiting:      117  174  51.4    164     685
+ab -n200 -c5 -C _cms_session=xxx https://staging.cmscontracts.com/contracts?pp=disable
+Time per request:       1031.395 [ms] (mean)
+Time per request:       206.279 [ms] (mean, across all concurrent requests)
+Waiting:      119  322 214.5    277    1926
+Time per request:       524.087 [ms] (mean)
+Time per request:       104.817 [ms] (mean, across all concurrent requests)
+Waiting:      127  264  90.5    255     510
+Time per request:       519.839 [ms] (mean)
+Time per request:       103.968 [ms] (mean, across all concurrent requests)
+Waiting:      114  256 102.4    228     589
+Time per request:       482.482 [ms] (mean)
+Time per request:       96.496 [ms] (mean, across all concurrent requests)
+Waiting:      126  220  71.0    210     461

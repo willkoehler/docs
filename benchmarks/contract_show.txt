@@ -1,24 +1,53 @@
-Heroku (webrick)
-ab -n20 -C _cms_session=[copy from browser] https://cms76.herokuapp.com/contracts/162
-Time per request:       427.977 [ms] (mean)
-Waiting:           172  266  83.5    256     454
-
-DigitalOcean 1GB (3 workers)
-ab -n40 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts/234
-Time per request:       363.909 [ms] (mean)
-Waiting:           117  155  34.9    144     223
-
-DigitalOcean 2GB (3 workers)
-ab -n40 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts/165
-Time per request:       517.202 [ms] (mean)
-Waiting:           192  296 214.5    262    1604
-
-DigitalOcean 1GB (3 workers)
-ab -n40 -C _cms_session=[copy from browser] https://staging.cmscontracts.com/contracts/3
-Time per request:       527.019 [ms] (mean)
-Waiting:           181  314 143.4    262     719
-
 AWS t1.micro (3 workers)
-ab -n40 -C _cms_session=[copy from browser] https://demo.cmscontracts.com/contracts/194
-Time per request:       328.588 [ms] (mean)
-Waiting:           107  140  39.6    115     214
+ab -n50 -c1 -C _cms_session=xxx https://staging.cmscontracts.com/contracts/47?pp=disable
+Time per request:       323.458 [ms] (mean)
+Waiting:      109  145  41.4    122     230
+ab -n50 -c5 -C _cms_session=xxx https://staging.cmscontracts.com/contracts/47?pp=disable
+Time per request:       720.814 [ms] (mean)
+Time per request:       144.163 [ms] (mean, across all concurrent requests)
+Waiting:      312  504 142.8    529     762
+
+AWS c3.large (5 workers)
+ab -n200 -c1 -C _cms_session=xxx https://staging.cmscontracts.com/contracts/47?pp=disable
+Time per request:       465.189 [ms] (mean)
+Waiting:      115  142  87.2    124    1330
+ab -n200 -c5 -C _cms_session=xxx https://staging.cmscontracts.com/contracts/47?pp=disable
+Time per request:       522.539 [ms] (mean)
+Time per request:       104.508 [ms] (mean, across all concurrent requests)
+Waiting:      115  191  49.4    184     363
+
+AWS m1.small (2 workers) - 2 workers is measurably faster than 5 workers for m1.small
+ab -n200 -c1 -C _cms_session=xxx https://staging.cmscontracts.com/contracts/47?pp=disable
+Time per request:       755.354 [ms] (mean)
+Waiting:      150  432 223.0    318    1266
+ab -n200 -c5 -C _cms_session=xxx https://staging.cmscontracts.com/contracts/47?pp=disable
+Time per request:       1763.007 [ms] (mean)
+Time per request:       352.601 [ms] (mean, across all concurrent requests)
+Waiting:      435 1169 347.1   1133    2133
+
+Heroku (2 dynos)
+ab -n200 -c1 -C _cms_session=xxx https://cms76.herokuapp.com/contracts/162?pp=disable
+Time per request:       438.067 [ms] (mean)
+Waiting:      153  302 159.1    242    1026
+ab -n200 -c5 -C _cms_session=xxx https://cms76.herokuapp.com/contracts/162?pp=disable
+Time per request:       666.508 [ms] (mean)
+Time per request:       133.302 [ms] (mean, across all concurrent requests)
+Waiting:      160  514 407.2    381    2705
+
+Digital Ocean 1GB (2 workers)
+ab -n200 -c1 -C _cms_session=xxx https://staging.cmscontracts.com/contracts/96?pp=disable
+Time per request:       372.543 [ms] (mean)
+Waiting:      110  160  44.0    146     414
+ab -n200 -c5 -C _cms_session=xxx https://staging.cmscontracts.com/contracts/96?pp=disable
+Time per request:       554.717 [ms] (mean)
+Time per request:       110.943 [ms] (mean, across all concurrent requests)
+Waiting:      162  340  88.6    339     655
+
+Digital Ocean 2GB (5 workers)
+ab -n200 -c1 -C _cms_session=xxx https://staging.cmscontracts.com/contracts/96?pp=disable
+Time per request:       355.406 [ms] (mean)
+Waiting:      106  151  38.2    141     294
+ab -n200 -c5 -C _cms_session=xxx https://staging.cmscontracts.com/contracts/96?pp=disable
+Time per request:       422.600 [ms] (mean)
+Time per request:       84.520 [ms] (mean, across all concurrent requests)
+Waiting:      110  207  82.1    186     625
