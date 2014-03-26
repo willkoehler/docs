@@ -4,7 +4,7 @@
 
 For the web applications I'm developing there are three instance types that make sense.
 
-### Micro Instance
+### t1.micro
 
 * 613 MB memory
 * Up to 2 EC2 Compute Units (for short periodic bursts)
@@ -14,46 +14,46 @@ For the web applications I'm developing there are three instance types that make
 * API name: t1.micro
 * see details in AWS Micro (t1.micro) instances below
 
-### Small Instance
+### m1.small
 
-* 1.7 GB memory
-* 1 EC2 Compute Unit (1 virtual core with 1 EC2 Compute Unit)
+* 1.70 GB memory
+* 1 vCPU / 1 ECU
 * 160 GB instance storage
-* 32-bit platform
-* I/O Performance: Moderate
+* 32-bit or 64-bit platform
+* I/O Performance: Low
 * API name: m1.small
 
-### Medium Instance
+### m3.medium
+
+* 3.75 GB memory
+* 1 vCPU / 3 ECU
+* 1 x 4GB SSD instance storage
+* 64-bit platform
+* I/O Performance: Moderate
+* API name: m3.medium
+
+### c3.large
 
 * 3.75 GB of memory
-* 2 EC2 Compute Units (1 virtual core with 2 EC2 Compute Unit)
-* 410 GB of instance storage
-* 32-bit or 64-bit platform
+* 2 vCPU / 7 ECU
+* 2 x 16GB SSD instance storage
+* 64-bit platform
 * I/O Performance: Moderate
-* API name: m1.medium
-
-### High-CPU Medium Instance
-
-* 1.7 GB of memory
-* 5 EC2 Compute Units (2 virtual cores with 2.5 EC2 Compute Units each)
-* 350 GB of instance storage
-* 32-bit platform
-* I/O Performance: Moderate
-* API name: c1.medium
+* API name: c3.large
 
 ### On demand pricing:
 
-* **t1.micro:** $14.60/month    (out of date?)
-* **m1.small:** $43.80/month    (out of date?)
-* **m1.medium:** $87.60/month   (out of date?)
-* **c1.medium:** $105.85/month  (as of 4/22/2013)
+* **t1.micro:**   $14.60/month  (as of 4/1/2014)
+* **m1.small:**   $32.12/month  (as of 4/1/2014)
+* **m3.medium:**  $51.10/month  (as of 4/1/2014)
+* **c3.large:**   $76.65/month  (as of 4/1/2014)
 
 ### Pricing with a 3 year commitment (heavy utilization)
 
-* **t1.micro:** $6.42/month   (out of date?)
-* **m1.small:** $17.82/month  (out of date?)
-* **m1.medium:** $35.64/month (out of date?)
-* **c1.medium:** $42.10/month (as of 4/22/2013)
+* **t1.micro:**    $6.42/month  (as of 4/1/2014)
+* **m1.small:**   $11.79/month  (as of 4/1/2014)
+* **m3.medium:**  $20.31/month  (as of 4/1/2014)
+* **c3.large:**   $30.17/month  (as of 4/1/2014)
 
 ## AWS Micro (t1.micro) instances
 
