@@ -68,9 +68,9 @@ Refresh all gems from their source and rebuilds all extensions and regenerates b
 Ruby 1.9 includes RubyGems by default so you do not need a `require 'rubygems'` statement in
 order to load gem libraries. Just use `require 'gemname'` statements as needed.
 
-# Create New Rails App with PostgreSQL and RSpec
+# Create New Rails App with MySQL RSpec
 
-    rails new app_name -T -d postgresql   # create Rails app without Test::Unit
+    rails new app_name -T -d mysql    # create Rails app without Test::Unit
     
 Run Bundler, setup the database
 
