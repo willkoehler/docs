@@ -20,11 +20,11 @@ Passenger and Rubber are locked at versions defined in the config.
 # Upgrade Ruby
 
 Edit `config/rubber/rubber-ruby.yml` and update `ruby_build_version` to the latest version (which
-can be found here <https://github.com/sstephenson/ruby-build/blob/master/CHANGELOG.md>) and update
+can be found here <https://github.com/sstephenson/ruby-build/releases>) and update
 Ruby to whatever version you wish
 
-    ruby_build_version: 20140110
-    ruby_version: 2.0.0-p353
+    ruby_build_version: 20140408
+    ruby_version: 2.0.0-p451
 
 Bootstrap the server. This will detect the version of ruby-build and Ruby have changed and install
 the new versions. Rubygems will also be updated by ruby-build. All systems gems (including Bundler)
