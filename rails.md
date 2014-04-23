@@ -174,7 +174,7 @@ the migration
     bundle exec rake db:migrate:redo            # redo the last migration
     bundle exec rake db:migrate:redo STEP=3     # rollback and re-apply the last three migrations
 
-Prepare the test database after adding new migrations.
+Prepare the test database after adding new migrations (not needed in Rails 4.1)
 
     bundle exec rake db:test:prepare
 
