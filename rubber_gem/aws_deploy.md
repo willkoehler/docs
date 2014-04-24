@@ -324,8 +324,9 @@ If your application has db seeds, SSH into server (see instructions below) and s
 
 On subsequent deploys, you only need to deploy and optionally migrate the database
 
-    bundle exec cap deploy               # deploy the app (after the first deploy)
-    bundle exec cap deploy:migrate       # (if needed) to run db migrations
+    bundle exec cap deploy                  # deploy the app (after the first deploy)
+    bundle exec cap deploy:migrate          # (if needed) to run db migrations
+    bundle exec cap deploy:migrations       # or do both deploy and migrations at the same time
 
 You should be able to re-run rubber:bootstrap any time. If the bootstrapping process is interrupted, 
 rubber:bootstrap is smart enough to pick up where it left off. If, for some reason, rubber:bootstrap
