@@ -31,7 +31,7 @@ each time it starts which will prevent Nginx from starting on reboot, deploy, et
 
 ### 3. Generate Certificate Signing Request (CSR)
 
-    openssl req -new -key domain.com.key -out domain.com.csr
+    openssl req -new -sha256 -key domain.com.key -out domain.com.csr
 
 You will be asked for several pieces of information. The most important is the
 `Common Name`. This is your domain name. If the certificate is for a single
@@ -46,13 +46,15 @@ Make sure to copy and paste the full CSR into the request including the header
 ### 5. Download the certificate bundle and append GoDaddy SSL chain file to the crt file
 
 Select Apache server type when downloading. The certificate bundle will contain two
-files `domain.com.crt` and `gd_bundle.crt`. `gd_bundle.crt` is the SSL chain file.
+files `xxxxxxxx.crt` and `gd_bundle-g2-g1.crt`. `gd_bundle-g2-g1.crt` is the SSL chain file.
 It links your certificate back to the original certificate authority. Without the chain
 file, some browsers will complain the certificate is invalid.
 
 Since Nginx doesn't have a way to specify the SSL chain file in the configuration,
 you must append the SSL chain file to the end of your certificate. Just copy and paste
-the contents of `gd_bundle.crt` to the end of `domain.com.crt`.
+the contents of `gd_bundle-g2-g1.crt` to the end of `xxxxxxxx.crt`.
+
+rename `xxxxxxxx.crt` to `domain.com.crt`
 
 ### 6. Copy key and crt files into app secrets
 
