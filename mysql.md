@@ -1,5 +1,11 @@
 # MySQL
 
+Starting and stopping from the command line
+
+    sudo /usr/local/mysql/support-files/mysql.server start
+    sudo /usr/local/mysql/support-files/mysql.server stop
+    sudo /usr/local/mysql/support-files/mysql.server restart
+
 Helpful MySQL commands for creating databases and users and granting privileges
 
     SHOW DATABASES;
