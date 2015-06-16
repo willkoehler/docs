@@ -58,12 +58,3 @@ found in the OSX Keychain.
     openssl-osx-ca
 
 See <https://github.com/raggi/openssl-osx-ca> for more details
-
-## Build rdoc documentation (optional)
-
-This is an optional step if you want the rdoc documentation. Looks like the makefile only
-builds ri docs. The only option for building html-formatted docs is manually running rdoc.
-First need to remove the empty doc folder.
-
-    sudo rm -r /usr/local/ruby/share/doc
-    sudo ./bin/rdoc --no-force-update --all --op /usr/local/ruby/share/doc
