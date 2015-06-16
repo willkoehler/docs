@@ -58,3 +58,11 @@ found in the OSX Keychain.
     openssl-osx-ca
 
 See <https://github.com/raggi/openssl-osx-ca> for more details
+
+## Alternate Instructions
+
+chruby has also documented installation of Ruby from source. These may be better / more up
+to date than my instructions.
+
+<https://github.com/postmodern/chruby/wiki/Ruby>
+
