@@ -91,26 +91,6 @@ Run Guard in its own terminal tab.
 
     bundle exec guard
 
-If we use Spork to preload the Rails environment (see below), RSpec will simply be connecting
-to a pre-loaded Rails environment. As long as the system version of RSpec matches the version of
-RSpec in our Gemfile, we don't need to use `"bundle exec"` when running RSpec. We can edit
-our Guardfile and add `:bundler => false` to the list of options. This saves a few seconds each
-time Guard runs our test suite.
-
-    guard 'rspec', :version => 2, :bundler => false do
-      watch(%r{^spec/.+_spec\.rb})
-      watch(%r{^lib/(.+)\.rb})     { |m| "spec/lib/#{m[1]}_spec.rb" }
-      .
-      .
-      .
-
-## Use Spork to speed up tests (Outdated. I use Spring now)
-
-<http://railscasts.com/episodes/285>
-
-"Spork improves the loading time of your test suite by starting up your Rails application once
-in the background. Use it with Guard for the ultimate combo in fast feedback while doing TDD"
-
 # RSpec Commands
 
 Run tests: all tests, specify subdirectory, specify a spec file, specify specific specs
