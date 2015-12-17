@@ -77,7 +77,8 @@ Run Bundler, setup the database
 
     cd app_name
     bundle --without production   # (--without is a remembered options, only needed the first time)
-    rake db:migrate               # setup the initial database
+    rake db:create                # create the database
+    rake db:migrate               # initial migration to create schema.db
 
 Setup RSpec (must add `gem 'rspec-rails'` to Gemfile)
 
