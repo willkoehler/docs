@@ -1,6 +1,6 @@
 # Install Ruby from scratch on Mac OS X
 
-This has been tested on OS X Yosemite with Ruby 2.2.0
+This has been tested on OS X El Capitan with Ruby 2.2.4p230
 
 ## Update some libraries needed by Ruby.
 
@@ -16,9 +16,9 @@ It's ok to ignore the warning in the configure step:
 `WARNING: unrecognized options: --with-openssl-dir, --with-readline-dir`
 
     cd /tmp
-    curl -O http://cache.ruby-lang.org/pub/ruby/2.2/ruby-2.2.0.tar.gz
-    tar -xvzf ruby-2.2.0.tar.gz
-    cd ruby-2.2.0/
+    curl -O https://cache.ruby-lang.org/pub/ruby/2.2/ruby-2.2.4.tar.gz
+    tar -xvzf ruby-2.2.4.tar.gz
+    cd ruby-2.2.4/
     ./configure --prefix=/usr/local/ruby --disable-install-doc --with-openssl-dir=`brew --prefix openssl` --with-readline-dir=`brew --prefix readline`
     make
     sudo make install
@@ -28,7 +28,7 @@ It's ok to ignore the warning in the configure step:
 Edit /etc/paths and add `/usr/local/ruby/bin` to the first line so the new version
 of ruby is the default. Exit and open the terminal window to apply changes.
 
-## Verify Ruby is working and version is 2.0.0p598
+## Verify Ruby is working and version is 2.2.4
 
     ruby -v
 
@@ -58,6 +58,17 @@ found in the OSX Keychain.
     openssl-osx-ca
 
 See <https://github.com/raggi/openssl-osx-ca> for more details
+
+## Fix for errors when building Nokogiri gem
+
+When bundler installs the Nokogiri gem you may see errors like `An error occurred while installing nokogiri
+(1.6.6.2), and Bundler cannot continue` along with `libxml2 version 2.6.21 or later is required!` or
+`The file "/usr/include/iconv.h" is missing in your build environment`
+
+To fix this configure build settings for Nokogiri. Note that the `with-xml2-include` path is specific
+to El Capitan and this will break on a future OS update
+
+    bundle config build.nokogiri --use-system-libraries=true --with-xml2-include=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/usr/include/libxml2
 
 ## Alternate Instructions
 
