@@ -38,23 +38,25 @@ You will be asked for several pieces of information. The most important is the
 domain, include the www i.e. www.domain.com. For wildcard certificates, use
 a * i.e. *.domain.com
 
-### 4. Request SSL certificate from GoDaddy or equivalent
+### 4. Request SSL certificate from RapidSSLOnline or equivalent
 
 Make sure to copy and paste the full CSR into the request including the header
 "`-----BEGIN CERTIFICATE REQUEST-----`" and footer "`-----END CERTIFICATE REQUEST-----`"
 
-### 5. Download the certificate bundle and append GoDaddy SSL chain file to the crt file
+Select "Apache 2" for the server type. 
 
-Select Apache server type when downloading. The certificate bundle will contain two
-files `xxxxxxxx.crt` and `gd_bundle-g2-g1.crt`. `gd_bundle-g2-g1.crt` is the SSL chain file.
-It links your certificate back to the original certificate authority. Without the chain
-file, some browsers will complain the certificate is invalid.
+### 5. Download the certificate bundle and append RapidSSLOnline chain file to the crt file
+
+The certificate bundle will contain three files: `ServerCertificate.cer`, `CACertificate-INTERMEDIATE.cer`,
+and `CACertificate-ROOT.cer`. The last two are the SSL chain files. They links your certificate back to the
+original certificate authority. Without the chain file, some browsers will complain the certificate is invalid.
 
 Since Nginx doesn't have a way to specify the SSL chain file in the configuration,
-you must append the SSL chain file to the end of your certificate. Just copy and paste
-the contents of `gd_bundle-g2-g1.crt` to the end of `xxxxxxxx.crt`.
+you must append the SSL chain files to the end of your certificate. Just copy and paste
+the contents of the chain files to the end of `ServerCertificate.cer`. `CACertificate-ROOT.cer`
+should be at the bottom.
 
-rename `xxxxxxxx.crt` to `domain.com.crt`
+rename `ServerCertificate.cer` to `domain.com.crt`
 
 ### 6. Copy key and crt files into app secrets
 
@@ -87,4 +89,4 @@ Tell rails to redirect all requests to SSL and use secure cookies. Edit
 
 ### 9. Test the SSL certificate
 
-<http://www.ssltest.net> or <https://www.ssllabs.com/ssldb/>
+<https://www.ssllabs.com/ssltest/>
