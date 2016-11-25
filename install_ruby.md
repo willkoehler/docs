@@ -1,6 +1,6 @@
 # Install Ruby from scratch on Mac OS X
 
-This has been tested on OS X El Capitan with Ruby 2.2.4p230
+This has been tested on OS X Sierra with Ruby 2.3.3
 
 ## Update some libraries needed by Ruby.
 
@@ -16,9 +16,9 @@ It's ok to ignore the warning in the configure step:
 `WARNING: unrecognized options: --with-openssl-dir, --with-readline-dir`
 
     cd /tmp
-    curl -O https://cache.ruby-lang.org/pub/ruby/2.2/ruby-2.2.4.tar.gz
-    tar -xvzf ruby-2.2.4.tar.gz
-    cd ruby-2.2.4/
+    curl -O https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.3.tar.gz
+    tar -xvzf ruby-2.3.3.tar.gz
+    cd ruby-2.3.3/
     ./configure --prefix=/usr/local/ruby --disable-install-doc --with-openssl-dir=`brew --prefix openssl` --with-readline-dir=`brew --prefix readline`
     make
     sudo make install
@@ -28,14 +28,14 @@ It's ok to ignore the warning in the configure step:
 Edit /etc/paths and add `/usr/local/ruby/bin` to the first line so the new version
 of ruby is the default. Exit and open the terminal window to apply changes.
 
-## Verify Ruby is working and version is 2.2.4
+## Verify Ruby is working and version is 2.3.3
 
     ruby -v
 
 ## Update gem to latest version and install Bundler
 
-    sudo gem update --system
-    sudo gem install bundler
+    sudo gem update --system --no-document
+    sudo gem install bundler --no-document
 
 ## Fix for rubygems certificate problems.
 
@@ -68,7 +68,7 @@ When bundler installs the Nokogiri gem you may see errors like `An error occurre
 To fix this configure build settings for Nokogiri. Note that the `with-xml2-include` path is specific
 to El Capitan and this will break on a future OS update
 
-    bundle config build.nokogiri --use-system-libraries=true --with-xml2-include=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/usr/include/libxml2
+    bundle config build.nokogiri --use-system-libraries=true --with-xml2-include=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/usr/include/libxml2
 
 ## Alternate Instructions
 
