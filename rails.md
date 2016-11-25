@@ -56,10 +56,9 @@ Display environment that RubyGems is running in
 
     gem environment
 
-Uninstall all gems on the system (to start fresh if desired). Ignore warnings about
-default gems. Uninstalling default gems will fail and be skipped.
+Uninstall all gems on the system (to start fresh if desired).
 
-    for i in `gem list --no-versions`; do sudo gem uninstall -aIx $i; done
+    gem uninstall --force --executables --all
 
 Refresh all gems from their source and rebuilds all extensions and regenerates bin stubs
 
