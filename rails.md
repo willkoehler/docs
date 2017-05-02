@@ -70,7 +70,9 @@ order to load gem libraries. Just use `require 'gemname'` statements as needed.
 
 # Create New Rails App with MySQL RSpec
 
-    rails new app_name -T -d mysql    # create Rails app without Test::Unit
+Create Rails app without Test::Unit, Turbolinks, and ActionCable
+
+    rails new app_name -T --skip-turbolinks --skip-action-cable -d mysql
     
 Run Bundler, setup the database
 
