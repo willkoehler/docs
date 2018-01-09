@@ -130,7 +130,7 @@ Generate an integration test (i.e. request spec). Integration test will be creat
 
 Open up the db console
 
-    rails dbconsole
+    rails dbconsole -p [environment]
 
 Show list of current routes
 
