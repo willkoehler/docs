@@ -14,13 +14,22 @@ Helpful MySQL commands for creating databases and users and granting privileges
     USE rxmeditrend;                                    # switch to a database
     
     SELECT User, Host FROM mysql.user;                  # List all the users in the system
-    CREATE USER 'username' IDENTIFIED BY 'password';
-    GRANT ALL ON rxmeditrend.* TO 'username';
-    SHOW GRANTS FOR 'username'@'host';
-    SET PASSWORD FOR 'username'@'host' = PASSWORD('password');
+    CREATE USER 'username' IDENTIFIED BY 'password';    # Create a user
+    GRANT ALL ON rxmeditrend.* TO 'username';           # Grant privileges to a user
+    SHOW GRANTS FOR 'username'@'host';                  # Show privileges for a user
+    SET PASSWORD FOR 'username'@'host' = PASSWORD('password');    # Change user password
+    DROP USER 'username'@'host';                        # Delete a user
     FLUSH PRIVILEGES;                                   # Flush privileges after manually manipulating the user table
     
+Show MySQL table sizes
+
     SHOW TABLE STATUS; # shows size of table used and amount of free space than can be reclaimed in Data_free
+
+    SELECT table_name, table_rows, round(((data_length) / 1024 / 1024), 2) `Size in MB`
+    FROM information_schema.TABLES
+    WHERE table_schema="yourdatabase"
+    ORDER BY table_rows DESC;
+
 
 # MyISAM Tables
 
